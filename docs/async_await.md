@@ -168,3 +168,35 @@ foreach (var id in ids)
 	await _myRepo.UpdateAsync(id);
 }
 ```
+
+## Favor `await` over synchronous calls
+Using blocking calls instead of `await` can lead to potential deadlocks and other side effects like a poor stack trace in case of an exception and less scalability in web frameworks like ASP.NET core.
+
+❌ **Bad** This call blocks the thread.
+```csharp
+public async Task SomeOperationAsync()
+{
+	await ...
+}
+
+public void Do()
+{
+	SomeOperationAsync().Wait();
+}
+```
+
+✅ **Good** Use `async` & `await` in the whole chain
+```csharp
+public async Task SomeOperationAsync()
+{
+	await ...
+}
+
+public async Task Do()
+{
+	await SomeOperationAsyc();
+}
+```
+
+## Favor `GetAwaiter().GetResult()` over `Wait` and `Result`
+Task.GetAwaiter().GetResult() is preferred over Task.Wait and Task.Result because it propagates exceptions rather than wrapping them in an AggregateException.
