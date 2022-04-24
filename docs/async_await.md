@@ -121,7 +121,7 @@ static Task<string> GetAsync()
 }
 ```
 
-# `async void`
+## `async void`
 The problem with `async void` is first they are not awaitable and second they suffer the same problem with exceptions and stack trace as discussed a bit earlier. It is basically fire and forget.
 
 ❌ **Bad** Not awaited
@@ -142,7 +142,7 @@ public async Task DoAsync()
 
 > 💡 Info: There are valid cases for `async void` like top level event handlers.
 
-# `List<T>.ForEach` with `async`
+## `List<T>.ForEach` with `async`
 `List<T>.ForEach` and in general a lot of LINQ methods don't go well with `async` `await`:
 
 ❌ **Bad** Is the same as `async void`
