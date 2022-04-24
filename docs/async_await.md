@@ -91,11 +91,11 @@ public Task<string> GetContentFromUrlAsync(string url)
 public async Task<string> GetContentFromUrlAsync(string url)
 {
     using var client = new HttpClient();
-        return await lient.GetStringAsync(url);
+        return await client.GetStringAsync(url);
 }
 ```
 
-💡 Info: Eliding the `async` keyword will also elide the whole state machine. In very hot paths that might be worth a consideration. In normal cases one should not elide the keyword. The allocations one is saving is depending on the circumstances but a normally very very small especially if only smaller objects are passed around. Also performance-wise there is no big gain when eliding the keyword (we are talking nano seconds). Please measure first and act afterwards.
+> 💡 Info: Eliding the `async` keyword will also elide the whole state machine. In very hot paths that might be worth a consideration. In normal cases one should not elide the keyword. The allocations one is saving is depending on the circumstances but a normally very very small especially if only smaller objects are passed around. Also performance-wise there is no big gain when eliding the keyword (we are talking nano seconds). Please measure first and act afterwards.
 
 ## Return `null` `Task` or `Task<T>`
 When returning directly `null` from a synchronous call (no `async` or `await`) will lead to `NullReferenceException`:
@@ -118,5 +118,53 @@ await GetAsync();
 static Task<string> GetAsync()
 {
 	return Task.FromResult(null);
+}
+```
+
+# `async void`
+The problem with `async void` is first they are not awaitable and second they suffer the same problem with exceptions and stack trace as discussed a bit earlier. It is basically fire and forget.
+
+❌ **Bad** Not awaited
+```csharp
+public async void DoAsync()
+{
+	await SomeAsyncOp();
+}
+```
+
+✅ **Good** return `Task` instead of `void`
+```csharp
+public async Task DoAsync()
+{
+	await SomeAsyncOp();
+}
+```
+
+> 💡 Info: There are valid cases for `async void` like top level event handlers.
+
+# `List<T>.ForEach` with `async`
+`List<T>.ForEach` and in general a lot of LINQ methods don't go well with `async` `await`:
+
+❌ **Bad** Is the same as `async void`
+```csharp
+var ids = new List<int>();
+// ...
+ids.ForEach(id => _myRepo.UpdateAsync(id));
+```
+
+One could thing adding `async` into the lamdba would do the trick:
+
+❌ **Bad** Still the same as `async void` because `List<T>.ForEach` takes an `Action` and not a `Func<Task>`.
+```csharp
+var ids = new List<int>();
+// ...
+ids.ForEach(async id => await _myRepo.UpdateAsync(id));
+```
+
+✅ **Good** Enumerate through the list via `foreach`
+```csharp
+foreach (var id in ids)
+{
+	await _myRepo.UpdateAsync(id);
 }
 ```

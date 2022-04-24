@@ -45,4 +45,4 @@ Blazor diff engine determines which elements have to be re-rendered on every ren
 </ul>
 ```
 
-💡 Info: If you want to know more about `@key` [here](https://steven-giesel.com/blogPost/a8772410-847d-4fe7-ba93-3e03ab7748c0) is article about that topic.
+> 💡 Info: If you want to know more about `@key` [here](https://steven-giesel.com/blogPost/a8772410-847d-4fe7-ba93-3e03ab7748c0) is article about that topic.

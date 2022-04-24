@@ -10,7 +10,7 @@ theme:
   font:
     text: Sora
   palette:
-    primary: 'deep purple'
+    primary: 'indigo'
     accent: 'indigo'  
   prev_next_buttons_location: both
   navigation_depth: 4
