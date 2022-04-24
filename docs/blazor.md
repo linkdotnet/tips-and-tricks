@@ -4,7 +4,7 @@ The following chapter show some tips and tricks in regards to **Blazor**.
 ## `CascadingValue` fixed
 CascadingValues are used, as the name implies, the cascade a parameter down the hierarchy. The problem with that is, that every child component will listen to changes to the original value. This can get expensive. If your component does not rely on updates, you can pin / fix this value. For that you can use the IsFixed parameter.
 
-❌ **Bad** 
+❌ **Bad** in case `SomeOtherComponents` does not need update of the cascading value
 ```razor
 <CascadingValue Value="this">
     <SomeOtherComponents>
@@ -21,7 +21,7 @@ CascadingValues are used, as the name implies, the cascade a parameter down the 
 ## `@key` directive
 Blazor diff engine determines which elements have to be re-rendered on every render cycle. It does that via sequence numbers. That works in most of cases very well, but adding or removing items in the middle or at the beginning of the list, will lead to re-rendering the whole list instead of the single entry. 
 
-❌ **Bad** 
+❌ **Bad** in case we entries are added in the middle or at the beginning.
 ```razor
 <ul>
     @foreach (var item in items)
