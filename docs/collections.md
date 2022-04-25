@@ -105,3 +105,33 @@ public IEnumerable<MyDto> GetAll()
     ...
 }
 ```
+
+## Consider `IReadOnlyCollection<T>` if you always return an in memory list
+
+ Many developers assume that `IEnumerable` is the best type to return a collection from a method. It's not a bad choice, but it does mean that the caller cannot make any assumptions about the collection they have been given, If enumerating the return value will be an in-memory operation or a potentially expensive action. They also don't know if they can safely enumerate it more than once. So often the caller ends up doing a `.ToList()` or similar on the collection you passed, which is wasteful if it was already a `List<T>` already. This is actually another case in which `IReadOnlyCollection<T>` can be a good fit if you know your method is always going to return an `in-memory collection`.
+
+ So It gives your caller the ability to access the count of items and iterate through as many times as they like.
+
+
+ ❌ **Bad** With returning `IEnumerable<Product>`, We don't know the result is an in-memory operation or a potentially expensive action so I could be a risky operation with multiple enumeration.
+```csharp
+public IEnumerable<Product> GetAllProducts()
+{
+    if (...)
+    {
+        return null;
+    }
+    ...
+}
+```
+
+✅ **Good** If we are sure, our result is a in-memory collection it is better we return a `IReadOnlyCollection<Product>` instead of `IEnumerable<Product>`.
+```csharp
+public IReadOnlyCollection<Product> GetAllProducts()
+{
+    if (...)
+    {
+        return Enumerable.Empty<MyDto>();
+    }
+    ...
+}
