@@ -1,7 +1,7 @@
 # Exceptions
 This chapter looks closer to exceptions and how exceptions are handled.
 
-## Rethrowing exceptions incorrectly
+## Re-throwing exceptions incorrectly
 If done the wrong way, the stack trace including valuable information is gone.
 
 ❌ **Bad** Throwing the original object again will create a new stack trace

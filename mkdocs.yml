@@ -53,5 +53,6 @@ nav:
   - Blazor: blazor.md
   - Exceptions: exceptions.md
   - Misc: misc.md
+  - Strings: strings.md
 
 copyright: 2022 <a href="https://github.com/linkdotnet">Steven Giesel</a>.

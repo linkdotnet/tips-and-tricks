@@ -2,7 +2,7 @@
 A collection of different topics which didn't fit in the other categories.
 
 ## `new Random` in a loop
-> 💡 Info: This part is only valid for the old .NET Framework and not the newer .NET Core / .NET5/6 versions.
+> 💡 Info: This part is only valid for the old .NET Framework and not the newer .NET Core / .NET 5 or 6 versions.
 
 In the .NET Framework creating the [`Random`](https://docs.microsoft.com/en-us/dotnet/api/system.random?view=net-6.0) class without any parameter in very short time spans will create identical outputs.
 Especially in for loops this can result in the same number over and over again.
@@ -21,7 +21,7 @@ for(var i = 0; i < 3; i++)
 Prints:
 > 4  
 > 4  
-> 2
+> 4
 
 ✅ **Good** Extract the creation of the `Random` class outside the loop.
 ```
