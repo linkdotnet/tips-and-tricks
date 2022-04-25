@@ -35,7 +35,7 @@ void Caller()
 
 ## Possible multiple enumeration with `IEnumerable<T>`
 As `IEnumerable<T>` is not a materialized collection but more cursor on the current element of the enumeration, using multiple functions on `IEnumerable<T>` can lead to possible multiple enumerations.
-This becomes a penalty when retrieving the content is expensive as the work is done multiple times.
+This becomes a penalty when retrieving the content is expensive as the work is done multiple times, for example it could be an expensive operation that goes to a database multiple time with each enumeration, or it could even return different results in each enumeration.
 
 ❌ **Bad** Will enumerate the enumeration twice
 ```csharp
