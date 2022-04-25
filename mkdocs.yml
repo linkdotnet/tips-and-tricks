@@ -63,5 +63,8 @@ nav:
   - Exceptions: exceptions.md
   - Misc: misc.md
   - Strings: strings.md
+  - Advanced:
+    - section: advanced/index.md
+    - stackalloc: advanced/stackalloc.md
 
 copyright: 2022 <a href="https://github.com/linkdotnet">Steven Giesel</a>.
