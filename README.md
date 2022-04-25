@@ -1,5 +1,5 @@
 # Tips and tricks
-A collection of tips and tricks with smaller code snippets and explanation.
+A collection of tips, tricks and smaller pitfalls with smaller code snippets and explanation.
 
 Right now there are **15+** entries in the collection.
 The page has multiple sections divided by topic like `async`/`await` or `Blazor` and should give a good overview over common scenarios.
