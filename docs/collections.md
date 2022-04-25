@@ -127,3 +127,4 @@ public IReadOnlyCollection<Product> GetAllProducts()
 {
     // ...
 }
+```
