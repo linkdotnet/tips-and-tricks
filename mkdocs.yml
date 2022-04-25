@@ -51,6 +51,7 @@ markdown_extensions:
 nav:
   - Async / Await: async_await.md
   - Blazor: blazor.md
+  - Collections: collections.md
   - Exceptions: exceptions.md
   - IEnumerable: ienumerable.md
   - Misc: misc.md
