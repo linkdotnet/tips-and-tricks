@@ -3,31 +3,29 @@ This chapter looks closer to collections and its best practices.
 
 ## Passing collections as a method parameter 
 
-If your method needs to accept a collection as a parameter, then generally `IEnumerable<T>` is ok and this offers the most flexibility to the caller. It doesn't matter what concrete collection type they use, and it even allows them to pass lazily evaluated sequences in, This is a `general` approach. But it can create some `unexpected behaviors` like `multiple enumeration` for example on LINQ queries. For solving this case we can use `IReadOnlyList<T>` and `IReadOnlyCollection<T>` to prevent any unexpected behavior and multiple enumeration. This approach is more `specific` approach compare to using `IEnumerable<T>`.
+If your method needs to accept a collection as a parameter, then generally `IEnumerable<T>` is ok and this offers the most flexibility to the caller. It doesn't matter what concrete collection type they use, and it even allows them to pass lazily evaluated sequences in, This is a `general` approach and for preventing multiple enumeration we can call `ToList()` in first of executing method or we can use `IReadOnlyCollection<T>` or `IReadOnlyList` for preventing multiple enumeration.
 
-❌ **Bad** using `IEnumerable<T>` generally as input collection type is ok, but with passing a lazily evaluated sequences it can create some unexpected behaviors like multiple enumerations.
+❌ **Bad** using `IEnumerable<T>` generally as input collection type is ok, but without using `ToList()` in first of executing could create multiple enumeration.
 ```csharp
 void PrintProducts(IEnumerable<Product> products)
 {
-    // First Enumeration, Evaluate to a Database Query.
+    // First Enumeration.
     Console.WriteLine($"Product Count is: {products.Count()}.");
 
-    // Second Enumeration, Evaluate to a Database Query.
+    // Second Enumeration.
     foreach(var product in products)
     {
         Console.WriteLine($"Id: {product.Id} - Title: {product.Title}");
     }
-
 }
 
 void Caller() 
 {
-    var products = context.Products;
-    Process(products.where(p => p.Title == "IPhone")); 
+    PrintProducts(products.where(p => p.Title == "IPhone")); 
 }
 ```
 
-✅ **Good** With using `IReadOnlyCollection<>` in our parameter specifically, we can prevent unexpected behaviors and multiple enumerations.
+✅ **Good** With using `IReadOnlyCollection<T>` in our parameter specifically, we can prevent unexpected behaviors and multiple enumerations.
 ```csharp
 void PrintProducts(IReadOnlyCollection<Product> products)
 {
@@ -37,13 +35,31 @@ void PrintProducts(IReadOnlyCollection<Product> products)
     {
         Console.WriteLine($"Id: {product.Id} - Title: {product.Title}");
     }
-
 }
 
 void Caller() 
 {
-    var products = context.Products;
-    Process(products.where(p => p.Title == "IPhone").AsReadOnly()); 
+    PrintProducts(products.where(p => p.Title == "IPhone").AsReadOnly()); 
+}
+```
+
+✅ **Good** With using `IEnumerable<T>` in our parameter specifically and calling `ToList()` in first line of executing, we can prevent unexpected behaviors and multiple enumerations.
+```csharp
+void PrintProducts(IEnumerable<Product> products)
+{
+    var items = products.ToList();
+
+    Console.WriteLine($"Product Count is: {items.Count}.");
+
+    foreach(var product in items)
+    {
+        Console.WriteLine($"Id: {product.Id} - Title: {product.Title}");
+    }
+}
+
+void Caller() 
+{
+    PrintProducts(products.where(p => p.Title == "IPhone")); 
 }
 ```
 
