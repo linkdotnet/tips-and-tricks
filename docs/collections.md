@@ -113,15 +113,11 @@ public IEnumerable<MyDto> GetAll()
  So It gives your caller the ability to access the count of items and iterate through as many times as they like.
 
 
- ❌ **Bad** With returning `IEnumerable<Product>`, We don't know the result is an in-memory operation or a potentially expensive action so I could be a risky operation with multiple enumeration.
+ ❌ **Bad** With returning `IEnumerable<Product>`, We don't know the result is an in-memory operation or a potentially expensive action so It can be a risky operation with multiple enumeration.
 ```csharp
 public IEnumerable<Product> GetAllProducts()
 {
-    if (...)
-    {
-        return null;
-    }
-    ...
+    // ...
 }
 ```
 
@@ -129,9 +125,5 @@ public IEnumerable<Product> GetAllProducts()
 ```csharp
 public IReadOnlyCollection<Product> GetAllProducts()
 {
-    if (...)
-    {
-        return Enumerable.Empty<MyDto>();
-    }
-    ...
+    // ...
 }
