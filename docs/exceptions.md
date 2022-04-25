@@ -30,7 +30,6 @@ catch (Exception exc)
 
 ✅ **Good** Simply `throw` the exception to preserve the original stack trace.
 ```csharp
-```csharp
 try
 {
     // logic which can throw here
