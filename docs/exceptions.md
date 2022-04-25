@@ -16,7 +16,7 @@ catch (Exception exc)
 }
 ```
 
-❌ **Bad** Creating a new exception object with the original as `InnerException` can make debugging harder.
+⚠️ **Warning** Creating a new exception object with the original as `InnerException` but a new stack trace which can make debugging harder.
 ```csharp
 try
 {
