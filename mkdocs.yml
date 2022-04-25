@@ -53,7 +53,6 @@ nav:
   - Blazor: blazor.md
   - Collections: collections.md
   - Exceptions: exceptions.md
-  - IEnumerable: ienumerable.md
   - Misc: misc.md
   - Strings: strings.md
 

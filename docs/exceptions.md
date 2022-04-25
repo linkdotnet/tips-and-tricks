@@ -42,3 +42,44 @@ catch (Exception exc)
 ```
 
 > 💡 Info: Sometimes hiding the original stack trace might be the goal due to for example security related reasons. In the average case re-throwing via `throw;` is preferred.
+
+## Pokemon Exception Handling
+Indiscriminately catching exceptions. "Pokemon - gotta catch 'em all"
+
+❌ **Bad** Catching every exception and gracefully swallowing it.
+```csharp
+try
+{
+    MyOperation();
+}
+catch (Exception exc)
+{
+    // Do nothing
+}
+```
+
+Also:
+```csharp
+try
+{
+    MyOperation();
+}
+catch
+{
+    // Do nothing
+}
+```
+
+✅ **Good** Catch the specific exception one would expect and handle it.
+```csharp
+try
+{
+    MyOperation();
+}
+catch (InvalidOperationException exc)
+{
+    logger.Log(exc);
+    // More logic here and if wished re-throw the exception
+    throw; 
+}
+```
