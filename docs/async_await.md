@@ -194,9 +194,24 @@ public async Task SomeOperationAsync()
 
 public async Task Do()
 {
-	await SomeOperationAsyc();
+	await SomeOperationAsync();
 }
 ```
 
 ## Favor `GetAwaiter().GetResult()` over `Wait` and `Result`
-Task.GetAwaiter().GetResult() is preferred over Task.Wait and Task.Result because it propagates exceptions rather than wrapping them in an AggregateException.
+`Task.GetAwaiter().GetResult()` is preferred over `Task.Wait` and `Task.Result` because it propagates exceptions rather than wrapping them in an AggregateException. 
+
+❌ **Bad**
+```csharp
+string content = DownloadAsync().Result;
+```
+
+✅ **Good** 
+```csharp
+string content = DownloadAsync().GetAwaiter().GetResult();
+```
+
+## Don't use `Task.Delay` for small precise waiting times
+[`Task.Delay`](https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.delay?view=net-6.0#System_Threading_Tasks_Task_Delay_System_Int32_)'s internal timer is dependent on the underlying OS. On most windows machines this resolution is about 15ms.
+
+So: `Task.Delay(1)` will not wait one millisecond but something between one and 15 milliseconds.
