@@ -64,5 +64,15 @@ nav:
   - Advanced:
     - advanced/index.md
     - stackalloc: advanced/stackalloc.md
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/linkedin 
+      link: https://www.linkedin.com/in/steven-giesel/
+    - icon: fontawesome/brands/github
+      link: https://github.com/linkdotnet
+    - icon: fontawesome/solid/rss
+      link: https://steven-giesel.com/ 
+
 
 copyright: 2022 <a href="https://github.com/linkdotnet">Steven Giesel</a>.
