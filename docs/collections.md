@@ -15,7 +15,7 @@ void ApplyFilter<T>(this List<T> items, Expression<Func<T, bool>> source)
 void Caller() 
 {
     var products = dbContext.Products;
-    product.ApplyFilterByTitle(p => p.Title = "IPhone").ToList()); // requires us to add a ToList instead of lazily evaluated IEnumerable
+    products = products.ToList().ApplyFilterByTitle(p => p.Title = "IPhone"); // requires us to add a ToList instead of lazily evaluated IEnumerable
 }
 ```
 
@@ -29,6 +29,6 @@ void ApplyFilter<T>(this IEnumerable<T> items, Expression<Func<T, bool>> source)
 void Caller() 
 {
     var products = dbContext.Products;
-    product.ApplyFilterByTitle(p => p.Title = "IPhone").ToList()); // works fine without calling ToList directly
+    products = products.ApplyFilterByTitle(p => p.Title = "IPhone"); // works fine without calling ToList directly
 }
 ```
