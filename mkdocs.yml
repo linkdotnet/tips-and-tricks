@@ -52,6 +52,7 @@ nav:
   - Async / Await: async_await.md
   - Blazor: blazor.md
   - Exceptions: exceptions.md
+  - IEnumerable: ienumerable.md
   - Misc: misc.md
   - Strings: strings.md
 
