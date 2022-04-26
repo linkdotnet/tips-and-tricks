@@ -64,6 +64,7 @@ nav:
   - Advanced:
     - advanced/index.md
     - stackalloc: advanced/stackalloc.md
+    - Iterate through a List<T>: iterate_list.md
 extra:
   generator: false
   social:
