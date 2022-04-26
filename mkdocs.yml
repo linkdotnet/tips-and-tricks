@@ -63,6 +63,7 @@ nav:
   - Strings: strings.md
   - Advanced:
     - advanced/index.md
+    - ArrayPools to minimize allocations: advanced/arraypool.md
     - Iterate through a List<T>: advanced/iterate_list.md
     - stackalloc: advanced/stackalloc.md
     
