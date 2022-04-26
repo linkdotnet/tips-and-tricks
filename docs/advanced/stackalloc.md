@@ -47,3 +47,24 @@ buffer[1] = 1;
 
 int result = buffer[0] + buffer[1] + buffer[2]; // Is not necessarily 2
 ```
+
+## `stackalloc` in a loop
+Every `stackalloc` gets only deallocated **after** the function terminates. That means in a loop multiple `stackalloc` will pill up memory which ultimately can lead to an `StackOverflowException`. Furthermore it is inefficient to allocate always the same amount of memory.
+
+❌ **Bad** Allocating over and over again the "same" memory inside a loop pilling up stack memory.
+```csharp
+for (int i = 0; i < 1000; ++i)
+{
+	Span<char> buffer = stackalloc char[256];
+	// ...
+}
+```
+
+✅ **Good** Create one slice of memory outside the loop.
+```csharp
+Span<char> buffer = stackalloc char[256];
+for (int i = 0; i < 1000; ++i)
+{	
+	// ...
+}
+```
