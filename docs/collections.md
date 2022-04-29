@@ -21,7 +21,7 @@ void PrintProducts(IEnumerable<Product> products)
 
 void Caller() 
 {
-    PrintProducts(products.where(p => p.Title == "IPhone")); 
+    PrintProducts(products.Where(p => p.Title == "IPhone")); 
 }
 ```
 
@@ -59,7 +59,7 @@ void PrintProducts(IEnumerable<Product> products)
 
 void Caller() 
 {
-    PrintProducts(products.where(p => p.Title == "IPhone")); 
+    PrintProducts(products.Where(p => p.Title == "IPhone")); 
 }
 ```
 
