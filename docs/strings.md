@@ -35,3 +35,30 @@ Here a comparison of both methods:
 |        StringConcat |   100 | 15,025.7 ns | 739.33 ns | 2,011.40 ns | 14,579.0 ns |  1.00 |    0.00 | 39.5203 |    161 KB |
 | StringBuilderAppend |   100 |  5,989.5 ns | 415.73 ns | 1,225.78 ns |  6,416.1 ns |  0.41 |    0.12 |  3.9063 |     16 KB |
 ```
+
+## Getting the printable length of a string or character
+Retrieving the length of a string can often be done via `"my string".Length`, which in a lot of scenarios is good enough. Under the hood [`string.Length`](https://docs.microsoft.com/en-us/dotnet/api/system.string.length?view=net-6.0) will return the number of characters in this string object. Unfortunately that does not always map one to one with the printed characters on screen.
+
+❌ **Bad** Assuming every printed characters has the same length.
+```csharp
+Console.Write("The following string has the length of 1: ");
+Console.WriteLine("🏴󠁧󠁢󠁥󠁮󠁧󠁿".Length);
+```
+
+Output:
+> The following string has the length of 1: 14
+
+Emojis can consist out of "other" emojis making the length very variable. Also other charaters like the following are wider:
+```csharp
+Console.WriteLine("𝖙𝖍𝖎𝖘".Length); // Prints 8
+```
+
+✅ **Good** Take [`StringInfo.LengthInTextElements`](https://docs.microsoft.com/en-us/dotnet/api/system.globalization.stringinfo.lengthintextelements?view=net-6.0) to know the amount of printed characters.
+```csharp
+Console.WriteLine(new StringInfo("🏴󠁧󠁢󠁥󠁮󠁧󠁿").LengthInTextElements);
+```
+
+Output:
+> 1
+
+> 💡 Info: Some more information about Unicode, UTF-8, UTF-16 and UTF-32 can be found [here](https://medium.com/bobble-engineering/emojis-from-a-programmers-eye-ca65dc2acef0).
