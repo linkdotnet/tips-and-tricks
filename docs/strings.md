@@ -61,4 +61,6 @@ Console.WriteLine(new StringInfo("🏴󠁧󠁢󠁥󠁮󠁧󠁿").LengthInTextEle
 Output:
 > 1
 
+To summarize: `string.Length` will give return the internal array size not the length of printed characters. `StringInfo.LengthInTextElements` will return the amount of printed characters.
+
 > 💡 Info: Some more information about Unicode, UTF-8, UTF-16 and UTF-32 can be found [here](https://medium.com/bobble-engineering/emojis-from-a-programmers-eye-ca65dc2acef0).
