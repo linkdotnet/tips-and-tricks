@@ -46,3 +46,30 @@ Blazor diff engine determines which elements have to be re-rendered on every ren
 ```
 
 > 💡 Info: If you want to know more about `@key` [here](https://steven-giesel.com/blogPost/a8772410-847d-4fe7-ba93-3e03ab7748c0) is article about that topic.
+
+## `StateHasChanged` from async call without `InvokeAsync`
+In the current state (.net6 / .net7.0 preview 4) Blazor WASM only runs on one thread at the time. Therefore switching context via `await` will still be run on the main UI thread. Once Blazor WASM introduces real threads, code which invokes UI changes from a background thread will throw an exception. For Blazor Server this holds true today, even though the `SynchronizationContext` tries to be as much as possible single threaded.
+
+❌ **Bad** Can lead to exceptions on Blazor Server now or Blazor WASM in the future.
+```csharp
+protected override void OnInitialized()
+{
+    base.OnInitialized();
+    Timer = new System.Threading.Timer(_ =>
+    {
+        StateHasChanged();
+    }, null, 500, 500);
+}
+```
+
+✅ **Good** Call `InvokeAsync` to force rendering on the main UI thread.
+```csharp
+protected override void OnInitialized()
+{
+    base.OnInitialized();
+    Timer = new System.Threading.Timer(_ =>
+    {
+        InvokeAsync(StateHasChanged);
+    }, null, 500, 500);
+}
+```
