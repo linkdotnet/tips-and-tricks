@@ -215,3 +215,13 @@ string content = DownloadAsync().GetAwaiter().GetResult();
 [`Task.Delay`](https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.delay?view=net-6.0#System_Threading_Tasks_Task_Delay_System_Int32_)'s internal timer is dependent on the underlying OS. On most windows machines this resolution is about 15ms.
 
 So: `Task.Delay(1)` will not wait one millisecond but something between one and 15 milliseconds.
+
+```csharp
+var stopwatch = Stopwatch.StartNew();
+await Task.Delay(1);
+stopwatch.Stop(); // Don't account the Console.WriteLine into the timer
+Console.WriteLine($"Delay was {stopwatch.ElapsedMilliseconds} ms");
+```
+
+Will print for example:
+> Delay was 6 ms
