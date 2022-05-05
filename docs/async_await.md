@@ -225,3 +225,44 @@ Console.WriteLine($"Delay was {stopwatch.ElapsedMilliseconds} ms");
 
 Will print for example:
 > Delay was 6 ms
+
+## Properly awaiting concurrent tasks
+Often times tasks are independent of each other and can be awaited independently.
+
+❌ **Bad** The following code will run roughly 1 second.
+```csharp
+
+await DoOperationAsync();
+await DoOperationAsync();
+
+async Task DoOperationAsync()
+{
+	await Task.Delay(500);
+} 
+```
+
+✅ **Good** When tasks or their data is independent they can be awaited independently for maximum benefits. The following code will run roughly 0.5 seconds.
+
+```csharp
+var t1 = DoOperationAsync();
+var t2 = DoOperationAsync();
+await t1;
+await t2;
+
+async Task DoOperationAsync()
+{
+	await Task.Delay(500);
+} 
+```
+
+An alternative to this would be [`Task.WhenAll`](https://docs.microsoft.com/en-us/documentation/):
+```csharp
+var t1 = DoOperationAsync();
+var t2 = DoOperationAsync();
+await Task.WhenAll(t1, t2); // Can also be inlined
+
+async Task DoOperationAsync()
+{
+	await Task.Delay(500);
+} 
+```
