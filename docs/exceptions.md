@@ -113,3 +113,41 @@ Both exceptions are meant only to be thrown from the runtime itself. Under norma
 And can catch `OutOfMemoryException` as they can also occur if a big array gets allocated but no more free space is available. That does not necessarily mean recovering from this is impossible.
 
 > 💡 Info: More details can be found [here.](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types)
+
+## Exception filtering with `when`
+The `when` expression was introduced with C# 6 and allows a more readable way of filtering exceptions.
+
+❌ **Bad** Less readable way.
+```csharp
+try
+{
+    await GetApiRequestAsync();
+}
+catch (HttpRequestException e)
+{
+    if (e.StatusCode == HttpStatusCode.BadRequest)
+    {
+        HandleBadRequest(e);
+    }
+    else if (e.StatusCode == HttpStatusCode.NotFound)
+    {
+        HandleNotFound(e);
+    }
+}
+```
+
+✅ **Good** More readable way.
+```csharp
+try
+{
+    await GetApiRequestAsync();
+}
+catch (HttpRequestException e) when (e.StatusCode == HttpStatusCode.BadRequest)
+{
+    HandleBadRequest(e);
+}
+catch (HttpRequestException e) when (e.StatusCode == HttpStatusCode.NotFound)
+{
+    HandleNotFound(e);
+}
+```
