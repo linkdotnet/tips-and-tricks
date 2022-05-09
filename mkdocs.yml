@@ -61,6 +61,7 @@ nav:
   - Blazor: blazor.md
   - Collections: collections.md
   - Exceptions: exceptions.md
+  - LINQ: linq.md
   - Misc: misc.md
   - Strings: strings.md
   - Advanced:
