@@ -26,7 +26,7 @@ In general conditions (excluding LINQ to SQL) `Any`/`All` in the worst case have
 persons.Count() > 0
 persons.Count(MyPredicate) > 0
 persons.Count(MyPredicate) == 0
-persons.Count(MyPredicate)  == persons.Count()
+persons.Count(MyPredicate) == persons.Count()
 ```
 
 ✅ **Good** More readable and avoids unnecessary enumerations
