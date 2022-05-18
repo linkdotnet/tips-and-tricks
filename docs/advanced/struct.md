@@ -106,3 +106,150 @@ Results:
 | SlimStruct |       Slim |            1000 |    484.738 ns |   8.7875 ns |   8.6305 ns |  0.08 |    0.00 |  0.2441 |       - |       - |    1024 B |        0.03 |
 
 ```
+
+## Override equals and operator equals on value types
+When comparing a custom `struct` with each other dotnet will use reflection to achieve comparison. In performance critical paths this might not be desirable.
+
+❌ **Bad** Don't provide overrides for `Equals` and similar operations.
+```csharp
+public struct Point
+{
+    public int X { get; set; }
+    public int Y { get; set; }
+}
+
+var p1 = default(Point);
+var p2 = default(Point);
+var isSame = p1 == p2; // Uses reflection to achieve comparison
+```
+
+✅ **Good** Provide explicit implementations.
+```csharp
+public struct Point : IEquatable<Point> // Implementing the inteface is optional
+{
+    public int X { get; set; }
+    public int Y { get; set; }
+
+    public override int GetHashCode() => ...
+    public override bool Equals(object obj) => ...
+    public bool Equals(Point p2) => ...
+
+    public static bool operator ==(Point point1, Point point2)
+    {
+        return point1.Equals(point2);
+    }
+
+    public static bool operator !=(Point point1, Point point2)
+    {
+        return !point1.Equals(point2);
+    }
+}
+```
+
+> 💡 Info: `record struct`, which were introduced with C# 10, automatically implement `IEquatable`. So by using a `record struct` you get some performance benefits. A more in-depth analysis can be found [here](https://steven-giesel.com/blogPost/073f2a14-ea0f-4241-9729-41ee0f30f90c).
+
+### Benchmark
+```csharp
+public class ValueTypeEquals
+{
+    private readonly PointNoOverride _noOverrideP1 = new();
+    private readonly PointNoOverride _noOverrideP2 = new();
+    private readonly PointRecord _pointRecordP1 = new(0, 0);
+    private readonly PointRecord _pointRecordP2 = new(0, 0);
+
+    [Benchmark(Baseline = true)]
+    public bool IsSameNoOverride() => _noOverrideP1.Equals(_noOverrideP2);
+
+    [Benchmark]
+    public bool IsSameOverride() => _pointRecordP1.Equals(_pointRecordP2);
+}
+
+public struct PointNoOverride
+{
+    public int X { get; init; }
+    public int Y { get; init; }
+}
+// record struct implements IEquatable<T>
+public record struct PointRecord(int X, int Y);
+```
+
+Results:
+```csharp
+|           Method |       Mean |     Error |    StdDev | Ratio |  Gen 0 | Allocated | Alloc Ratio |
+|----------------- |-----------:|----------:|----------:|------:|-------:|----------:|------------:|
+| IsSameNoOverride | 24.5980 ns | 0.7290 ns | 2.0682 ns |  1.00 | 0.0115 |      48 B |        1.00 |
+|   IsSameOverride |  0.6466 ns | 0.0499 ns | 0.0555 ns |  0.03 |      - |         - |        0.00 |
+```
+
+## Override `GetHashCode` when used in a `Dictionary`
+When a custom defined `struct` is used as a key in a `Dictionary` reflection is used to calculate the has of the current object. In performance critical paths that is not desirable.
+
+❌ **Bad** Rely on the reflection to calculate the hash
+```csharp
+public struct Point
+{
+    public int X { get; set; }
+    public int Y { get; set; }
+}
+
+var dictionary = new Dictionary<Point, WorldObject>();
+...
+var worldObjectAtP1 = dictionary[p1];
+```
+
+✅ **Good** Provide `GetHashCode` implementation.
+```csharp
+public struct Point
+{
+    public int X { get; set; }
+    public int Y { get; set; }
+
+    public override int GetHashCode() => HashCode.Combine(X, Y);
+}
+
+var dictionary = new Dictionary<Point, WorldObject>();
+...
+var worldObjectAtP1 = dictionary[p1];
+```
+
+> 💡 Info: `record struct`, which were introduced with C# 10, automatically implement a non reflective `GetHashCode`. So by using a `record struct` you get some performance benefits. A more in-depth analysis can be found [here](https://steven-giesel.com/blogPost/073f2a14-ea0f-4241-9729-41ee0f30f90c).
+
+### Benchmark
+```csharp
+[MemoryDiagnoser]
+public class StructGetHashCode
+{
+    private static readonly PointNoOverride pointNoOverride = new();
+    private static readonly PointRecord pointOverride = new();
+    private readonly Dictionary<PointNoOverride, int> dictionaryNoOverride = new()
+    {
+        { pointNoOverride, 1 }
+    };
+    private readonly Dictionary<PointRecord, int> dictionaryOverride = new()
+    {
+        { pointOverride, 1 }
+    };
+
+    [Benchmark(Baseline = true)]
+    public int GetFromNoOverride() => dictionaryNoOverride[pointNoOverride];
+
+    [Benchmark]
+    public int GetFromOverride() => dictionaryOverride[pointOverride];
+}
+
+public struct PointNoOverride
+{
+    public int X { get; init; }
+    public int Y { get; init; }
+}
+// record struct implements GetHashCode
+public record struct PointRecord(int X, int Y);
+```
+
+Results:
+```csharp
+|            Method |     Mean |    Error |   StdDev |   Median | Ratio | RatioSD |  Gen 0 | Allocated | Alloc Ratio |
+|------------------ |---------:|---------:|---------:|---------:|------:|--------:|-------:|----------:|------------:|
+| GetFromNoOverride | 57.35 ns | 1.303 ns | 3.801 ns | 56.31 ns |  1.00 |    0.00 | 0.0172 |      72 B |        1.00 |
+|   GetFromOverride | 19.45 ns | 0.413 ns | 0.386 ns | 19.30 ns |  0.33 |    0.02 |      - |         - |        0.00 |
+```

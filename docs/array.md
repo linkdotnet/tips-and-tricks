@@ -4,8 +4,8 @@ This page will look into arrays and their usage.
 ## Prefer jagged arrays over multidimensional
 In a multidimensional array, each element in each dimension has the same, fixed size as the other elements in that dimension. In a jagged array, which is an array of arrays, each inner array can be of a different size. By only using the space that's needed for a given array, no space is wasted. Also from a performance point of view a jagged array performs generally better than a multidimensional array.
 
-❌ **Bad** 
-```csharp Multidimensional array performs less optimal and can waste space.
+❌ **Bad** Multidimensional array performs less optimal and can waste space. 
+```csharp
 int[,] multiDimArray = { {1, 2}, {3, 4}};
 ```
 
