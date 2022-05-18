@@ -38,3 +38,43 @@ Prints:
 > 5  
 > 3  
 > 5
+
+## Implementing `GetHashCode`
+`GetHashCode` is mainly used for `Dictionary`. Mainly two things are important to say an object (at least from an dictionary point of view) is equal:
+ * `GetHashCode` for two objects are the same **and:**
+ * `Equals` is the same.
+
+Dotnet does the first because its cheaper to calculate hashes and only if they match to check if the object is really the same.
+
+❌ **Bad** GetHashCode which can cause collision
+```csharp
+public class Point
+{
+	public int X { get; set; }
+	public int Y { get; set; }
+
+	public override int GetHashCode() => X + Y; // Can lead to massive collisions
+}
+```
+
+✅ **Good** Since .netcore there is a helper class called: [`HashCode.Combine`](https://docs.microsoft.com/en-us/dotnet/api/system.hashcode.combine?view=net-6.0).
+```csharp
+public class Point
+{
+	public int X { get; set; }
+	public int Y { get; set; }
+
+	public override int GetHashCode() => HashCode.Combine(X, Y);
+}
+```
+
+✅ **Good** Also `ValueTuple` can be used for that purpose (since C# 7).
+```csharp
+public class Point
+{
+	public int X { get; set; }
+	public int Y { get; set; }
+
+	public override int GetHashCode() => (X, Y).GetHashCode();
+}
+```
