@@ -125,7 +125,7 @@ var isSame = p1 == p2; // Uses reflection to achieve comparison
 
 ✅ **Good** Provide explicit implementations.
 ```csharp
-public struct Point : IEquatable<Point> // Implementing the inteface is optional
+public struct Point : IEquatable<Point> // Implementing the interface is optional
 {
     public int X { get; set; }
     public int Y { get; set; }
@@ -134,15 +134,8 @@ public struct Point : IEquatable<Point> // Implementing the inteface is optional
     public override bool Equals(object obj) => ...
     public bool Equals(Point p2) => ...
 
-    public static bool operator ==(Point point1, Point point2)
-    {
-        return point1.Equals(point2);
-    }
-
-    public static bool operator !=(Point point1, Point point2)
-    {
-        return !point1.Equals(point2);
-    }
+    public static bool operator ==(Point point1, Point point2) => point1.Equals(point2);
+    public static bool operator !=(Point point1, Point point2) => !point1.Equals(point2);
 }
 ```
 
