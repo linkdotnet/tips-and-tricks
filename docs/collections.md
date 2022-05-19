@@ -158,3 +158,31 @@ public IReadOnlyCollection<Product> GetAllProducts()
     // ...
 }
 ```
+
+## Don't use zero-length arrays
+When initializing a zero-length array unnecessary memory allocation have to be made. Using `Array.Empty` can increase readability and reduce memory consumption as the memory is shared across all invocations of the method.
+
+ ❌ **Bad** Return zero-initialized array.
+ ```csharp
+public int[] MyFunc(string input)
+{
+    if (input == null)
+        return new int[0];
+}
+```
+
+ ✅ **Good** Use `Array.Empty<int>` to increase readability and less allocations.
+  ```csharp
+public int[] MyFunc(string input)
+{
+    if (input == null)
+        return Array.Empty<int>();
+}
+```
+
+> 💡 Info: For every generic version of `Array.Empty<T>` the instance and memory is shared.
+```csharp
+var isSame = ReferenceEquals(new int[0], new int[0]); // Is false
+var isSame = ReferenceEquals(Array.Empty<int>(), Array.Empty<int>()); // Is true
+var isSame = ReferenceEquals(Array.Empty<int>(), Array.Empty<float>()); // Is false
+```
