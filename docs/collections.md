@@ -182,7 +182,7 @@ public int[] MyFunc(string input)
 
 > 💡 Info: For every generic version of `Array.Empty<T>` the instance and memory is shared.
 ```csharp
-var isSame = ReferenceEquals(new int[0], new int[0]); // Is false
-var isSame = ReferenceEquals(Array.Empty<int>(), Array.Empty<int>()); // Is true
-var isSame = ReferenceEquals(Array.Empty<int>(), Array.Empty<float>()); // Is false
+ReferenceEquals(new int[0], new int[0]); // Is false
+ReferenceEquals(Array.Empty<int>(), Array.Empty<int>()); // Is true
+ReferenceEquals(Array.Empty<int>(), Array.Empty<float>()); // Is false
 ```
