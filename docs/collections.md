@@ -162,8 +162,8 @@ public IReadOnlyCollection<Product> GetAllProducts()
 ## Don't use zero-length arrays
 When initializing a zero-length array unnecessary memory allocation have to be made. Using `Array.Empty` can increase readability and reduce memory consumption as the memory is shared across all invocations of the method.
 
- ❌ **Bad** Return zero-initialized array.
- ```csharp
+❌ **Bad** Return zero-initialized array.
+```csharp
 public int[] MyFunc(string input)
 {
     if (input == null)
