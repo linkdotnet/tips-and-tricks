@@ -171,8 +171,8 @@ public int[] MyFunc(string input)
 }
 ```
 
- ✅ **Good** Use `Array.Empty<int>` to increase readability and less allocations.
-  ```csharp
+✅ **Good** Use `Array.Empty<int>` to increase readability and less allocations.
+```csharp
 public int[] MyFunc(string input)
 {
     if (input == null)
