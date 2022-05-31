@@ -8,10 +8,7 @@ This section looks into tips and tricks of the `ValueTuple` type which was intro
 public class Dimension : IEquatable<Dimension>
 {
     public Dimension(int height, int width)
-    {
-        Height = height;
-        Width = width;
-    }
+        => (Width, Height) = (height, width);
 
     public int Width { get; }
     public int Height { get; }
