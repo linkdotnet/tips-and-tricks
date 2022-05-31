@@ -65,6 +65,7 @@ nav:
   - LINQ: linq.md
   - Misc: misc.md
   - Strings: strings.md
+  - ValueTuple: valuetuple.md
   - Advanced:
     - advanced/index.md
     - ArrayPools to minimize allocations: advanced/arraypool.md
