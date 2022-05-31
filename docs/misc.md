@@ -78,3 +78,55 @@ public class Point
 	public override int GetHashCode() => (X, Y).GetHashCode();
 }
 ```
+
+## Virtual member calls in constructor
+Calling a virtual member in a constructor can lead to unexpected behavior. The reason is that initializers run from most derived to base type but constructors run from base constructor to most derived.
+
+❌ **Bad** This example will lead to a `NullReferenceException`
+```csharp
+public class Parent
+{
+	public Parent() { Console.WriteLine(GetType().Name); PrintHello(); }
+	public virtual void PrintHello() {}
+}
+
+public class Child : Parent
+{
+	private string foo; 
+	public Child()
+	{
+		foo = "Something";
+	}
+	
+	public override void PrintHello()
+	{
+		// foo will be null as it gets called in the base constructor before "our"
+		// Child constructor is called and initializes the state
+		Console.WriteLine(foo.ToUpperInvariant());
+	}
+}
+```
+Output:
+> Child  
+Unhandled exception. System.NullReferenceException: Object reference not set to an instance of an object.
+
+✅ **Good** Avoid virtual member calls via sealing the class or don't make the method virtual.
+```csharp
+public class Parent
+{
+	public Parent() { Console.WriteLine(GetType().Name); PrintHello(); }
+	public void PrintHello() {}
+}
+
+public class Child : Parent
+{
+	private string foo; 
+	public Child()
+	{
+		
+		foo = "Something";
+	}
+}
+```
+
+> 💡 Info: It is perfectly fine to call a virtual member if the caller is the most derived type in the chain and there can't be another derived type (therefore the class is `sealed`).
