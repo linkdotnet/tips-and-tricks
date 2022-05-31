@@ -17,7 +17,7 @@ public class Dimension : IEquatable<Dimension>
         => (Width, Height) == (other?.Width, other?.Height);
 
     public override bool Equals(object obj)
-        => obj is Dimension metrics && Equals(metrics);
+        => obj is Dimension dimension && Equals(dimension);
 
     public override int GetHashCode() 
         => (Width, Height).GetHashCode();
