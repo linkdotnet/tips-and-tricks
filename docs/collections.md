@@ -186,3 +186,30 @@ ReferenceEquals(new int[0], new int[0]); // Is false
 ReferenceEquals(Array.Empty<int>(), Array.Empty<int>()); // Is true
 ReferenceEquals(Array.Empty<int>(), Array.Empty<float>()); // Is false
 ```
+
+## Specify capacity of collections
+Often times collections like [`List<T>`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1.-ctor?view=net-6.0#system-collections-generic-list-1-ctor(system-int32)) offer constructors, which give the option to pass in the expected capacity of the list.
+The `DefaultCapacity` of a list is **4**. If added another item it will grow by the factor of 2. As the underlying structure of a `List<T>` is a conventional array and arrays can't shrink or grow in size, a new array has to be created with the new size plus the content of the old array. This takes times and needs to unnecessary allocations. This is especially important for hot paths.
+
+❌ **Bad** No capacity is given so the internal array has to be resized often.
+```csharp
+var numbers = new List<int>();
+for (var i = 0;i < 20_000; i++)
+    numbers.Add(i);
+```
+
+✅ **Good** Capacity is given and the internal array of the `List<T>` has the correct size.
+```csharp
+var numbers = new List<int>(20_000);
+for (var i = 0;i < 20_000; i++)
+    numbers.Add(i);
+```
+
+### Benchmark
+Result of the given example above:
+```csharp
+|              Method |      Mean |    Error |   StdDev | Ratio | RatioSD |   Gen 0 |   Gen 1 |   Gen 2 | Allocated | Alloc Ratio |
+|-------------------- |----------:|---------:|---------:|------:|--------:|--------:|--------:|--------:|----------:|------------:|
+| ListWithoutCapacity | 102.64 us | 1.999 us | 3.340 us |  1.00 |    0.00 | 41.6260 | 41.6260 | 41.6260 | 256.36 KB |        1.00 |
+|    ListWithCapacity |  39.55 us | 0.789 us | 1.698 us |  0.38 |    0.02 | 18.8599 |       - |       - |  78.18 KB |        0.30 |
+```
