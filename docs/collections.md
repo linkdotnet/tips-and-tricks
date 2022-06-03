@@ -194,14 +194,14 @@ The `DefaultCapacity` of a list is **4**. If added another item it will grow by 
 ❌ **Bad** No capacity is given so the internal array has to be resized often.
 ```csharp
 var numbers = new List<int>();
-for (var i = 0;i < 20_000; i++)
+for (var i = 0; i < 20_000; i++)
     numbers.Add(i);
 ```
 
 ✅ **Good** Capacity is given and the internal array of the `List<T>` has the correct size.
 ```csharp
 var numbers = new List<int>(20_000);
-for (var i = 0;i < 20_000; i++)
+for (var i = 0; i < 20_000; i++)
     numbers.Add(i);
 ```
 
