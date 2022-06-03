@@ -7,8 +7,8 @@ This section looks into tips and tricks of the `ValueTuple` type which was intro
 ```csharp
 public class Dimension : IEquatable<Dimension>
 {
-    public Dimension(int height, int width)
-        => (Height, Width) = (height, width);
+    public Dimension(int width, int height)
+        => (Width, Height) = (width, height);
 
     public int Width { get; }
     public int Height { get; }
