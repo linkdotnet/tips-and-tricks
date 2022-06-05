@@ -1,0 +1,7 @@
+{
+	"New tip": {
+		"prefix": "new",
+    "body": "## ${1:title}\n${2:description}\n\n❌ **Bad** ${3:bad}\n```csharp\n${4:code}\n```\n\n✅ **Good** ${5:good}\n```csharp\n${6:code}\n```",
+    "description": "Inserts the new template with the good and bad icon."
+	}
+}
