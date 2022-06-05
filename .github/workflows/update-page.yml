@@ -18,6 +18,19 @@ jobs:
     steps:
       - name: Checkout main
         uses: actions/checkout@v2
+
+      - name: Collect entries and sections
+        run: |
+          echo "entries=$(grep -ioR '^## ' * | wc -l)" >> $GITHUB_ENV
+          echo "sections=$(grep -ioR '^# ' * | wc -l)" >> $GITHUB_ENV
+
+      - name: Replace Tokens in readme.md
+        uses: cschleiden/replace-tokens@master
+        with:
+          files: 'README.md'
+        env:
+          entries: entries
+          sections: sections
         
       - name: Put readme.md as index.md
         run:  cp ./README.md docs/index.md
