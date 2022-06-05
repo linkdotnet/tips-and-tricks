@@ -70,6 +70,7 @@ nav:
     - advanced/index.md
     - ArrayPools to minimize allocations: advanced/arraypool.md
     - Iterate through a List<T>: advanced/iterate_list.md
+    - Span: advanced/span.md
     - stackalloc: advanced/stackalloc.md
     - struct: advanced/struct.md
     
