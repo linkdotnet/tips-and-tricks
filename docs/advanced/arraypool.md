@@ -1,7 +1,8 @@
 # ArrayPool
 An `ArrayPool` is a reusable memory pool which tries to decrease garbage collection and memory pressure and therefore enables better performance. Using the array pool normally consists out of three parts:
- * Renting some array from the `ArrayPool`
- * Doing something with the array
+
+ * Renting some array from the `ArrayPool`.
+ * Doing something with the array.
  * Returning the rented array back to the `ArrayPool`.
 
 As seen by the pattern it is most useful when a lot of smaller arrays are needed in a short time. The major downside of an `ArrayPool` is that the consumer is now responsible to give back the memory instead of the GC.
