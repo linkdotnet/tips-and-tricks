@@ -155,8 +155,8 @@ catch (HttpRequestException e) when (e.StatusCode == HttpStatusCode.NotFound)
 ## Finalizers should not throw exceptions
 Throwing an exception in a finalizer can lead to an immediate shutdown of the application without any cleanup.
 
-❌ **Bad** 
-```csharp Throwing an exception in the finalizer.
+❌ **Bad** Throwing an exception in the finalizer. 
+```csharp
 class MyClass
 {
     ~MyClass()
