@@ -22,14 +22,13 @@ jobs:
       - name: Collect entries and sections
         run: |
           echo "entries=$(grep -ioR '^## ' * | wc -l)" >> $GITHUB_ENV
-          echo $entries
 
       - name: Replace Tokens in index.md
         uses: cschleiden/replace-tokens@master
         with:
           files: 'docs/index.md'
         env:
-          entries: entries
+          entries: "${{ env.entries }}"
 
       - name: Deploy MkDocs
         uses: mhausenblas/mkdocs-deploy-gh-pages@master
