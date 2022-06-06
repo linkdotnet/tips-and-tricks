@@ -63,7 +63,7 @@ Result:
 ## Locality matters
 Memory location matters. Accessing memory location sequentially as opposed to "jumping" around to read some memory address.
 
-❌ **Bad** bad
+❌ **Bad** Do not access memory sequentially.
 ```csharp
 public int NotLocal()
 {
@@ -78,7 +78,7 @@ public int NotLocal()
 }
 ```
 
-✅ **Good** good
+✅ **Good** Accessing memory sequentially.
 ```csharp
 public int Local()
 {
