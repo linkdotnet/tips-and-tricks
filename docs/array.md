@@ -59,3 +59,45 @@ Result:
 |           CreateAndFillJaggedArray |  100 |  9,895.6 ns | 143.22 ns | 126.96 ns |  9,900.8 ns | 10.3302 | 0.0153 |  42.21 KB |
 | CreateAndFillMultidimensionalArray |  100 | 16,374.7 ns | 319.00 ns | 567.02 ns | 16,311.2 ns |  9.5215 | 0.0305 |   39.1 KB |
 ```
+
+## Locality matters
+Memory location matters. Accessing memory location sequentially as opposed to "jumping" around to read some memory address.
+
+❌ **Bad** bad
+```csharp
+public int NotLocal()
+{
+    var sum = 0;
+    for (var i = 0; i < _table.GetLength(1); i++)
+    {
+        for (var j = 0; j < _table.GetLength(0); j++) 
+            sum += _table[j, i];
+    }
+
+    return sum;
+}
+```
+
+✅ **Good** good
+```csharp
+public int Local()
+{
+    var sum = 0;
+    for (var i = 0; i < _table.GetLength(0); i++)
+    {
+        for (var j = 0; j < _table.GetLength(1); j++) 
+            sum += _table[i, j];
+    }
+
+    return sum;
+}
+```
+
+### Benchmark
+Results for the given example above:
+```csharp
+|   Method |     Mean |   Error |  StdDev | Ratio | RatioSD |
+|--------- |---------:|--------:|--------:|------:|--------:|
+|    Local | 120.8 us | 2.35 us | 2.70 us |  1.00 |    0.00 |
+| NotLocal | 158.6 us | 3.09 us | 3.56 us |  1.31 |    0.05 |
+```
