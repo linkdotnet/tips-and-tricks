@@ -213,3 +213,47 @@ Result of the given example above:
 | ListWithoutCapacity | 102.64 us | 1.999 us | 3.340 us |  1.00 |    0.00 | 41.6260 | 41.6260 | 41.6260 | 256.36 KB |        1.00 |
 |    ListWithCapacity |  39.55 us | 0.789 us | 1.698 us |  0.38 |    0.02 | 18.8599 |       - |       - |  78.18 KB |        0.30 |
 ```
+
+## Use `HashSet` to avoid linear searches
+If a collection is used often times to check whether or not an item is present a [`HashSet`](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.hashset-1?view=net-6.0) might be a better option than a `List<T>`. The initial cost to create a `HashSet` is more expensive than a `List<T>` but set-based operations are faster. In this case this holds true even for [`Any`](https://docs.microsoft.com/en-us/dotnet/api/system.linq.enumerable.any?view=net-6.0), which is basically a linear search through the array.
+
+❌ **Bad** If often checking for an item in a collection `Any` and `Contains` from `List<T>` can be slow.
+```csharp
+var userIds = Enumerable.Range(0, 1_000).ToList();
+usersIds.Any(u => u == 999); // Basically goes through 999 elements
+userIds.Contains(999); // Faster than Any but still slower than HashSet
+```
+
+✅ **Good** `HashSet` performs faster for set-based operations.
+```csharp
+var userIds = Enumerable.Range(0, 1_000).ToHashSet();
+userIds.Contains(999);
+```
+
+### Benchmark
+```csharp
+public class ListVsHashSet
+{
+    private const int Count = 10_000;
+    private readonly List<int> _list = Enumerable.Range(0, Count).ToList();
+    private readonly HashSet<int> _hashSet = Enumerable.Range(0, Count).ToHashSet();
+
+    [Benchmark(Baseline = true)]
+    public bool ListContains() => _list.Contains(Count - 1);
+
+    [Benchmark]
+    public bool ListAny() => _list.Any(l => l == Count - 1);
+
+    [Benchmark]
+    public bool HashSetContains() => _hashSet.Contains(Count - 1);
+}
+```
+
+Results:
+```csharp
+|          Method |          Mean |         Error |        StdDev |  Ratio | RatioSD |
+|---------------- |--------------:|--------------:|--------------:|-------:|--------:|
+|    ListContains |  1,279.002 ns |    10.5561 ns |     9.3577 ns |  1.000 |    0.00 |
+|         ListAny | 92,892.521 ns | 1,848.0088 ns | 3,379.1886 ns | 75.344 |    2.48 |
+| HashSetContains |      5.019 ns |     0.1364 ns |     0.1401 ns |  0.004 |    0.00 |
+```
