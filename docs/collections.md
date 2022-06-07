@@ -264,44 +264,23 @@ Be aware that the API is a bit different with a `HashSet` as the `HashSet` is no
 
 ❌ **Bad** Using LINQ and `List<T>` to find the intersection of two collectionss 
 ```csharp
-var evenNumbers = Enumerable.Range(0, 100).Where(i => i % 2 == 0).ToList();
-var dividableByThree = Enumerable.Range(0, 100).Where(i => i % 3 == 0).ToList();
+var evenNumbers = Enumerable.Range(0, 2_000).Where(i => i % 2 == 0).ToList();
+var dividableByThree = Enumerable.Range(0, 2_000).Where(i => i % 3 == 0).ToList();
 
 var evenNumbersDividableByThree = evenNumbers.Intersect(dividableByThree).ToList();
 ```
 
 ✅ **Good** Using a `HashSet` to find the intersection of two collections.
 ```csharp
-var evenNumbers = Enumerable.Range(0, 100).Where(i => i % 2 == 0).ToHashSet();
-var dividableByThree = Enumerable.Range(0, 100).Where(i => i % 3 == 0).ToHashSet();
+var evenNumbers = Enumerable.Range(0, 2_000).Where(i => i % 2 == 0).ToHashSet();
+var dividableByThree = Enumerable.Range(0, 2_000).Where(i => i % 3 == 0).ToHashSet();
 
 var evenNumbersDividableByThree = new HashSet(evenNumbers);
 evenNumbersDividableByThree.IntersectWith(dividableByThree);
 ```
 
 ### Benchmark
-```csharp
-public class ListVsHashSet
-{
-    private const int Count = 2_000;
-
-    private readonly List<int> _list1 = Enumerable.Range(0, Count).Where(i => i % 2 == 0).ToList();
-    private readonly List<int> _list2 = Enumerable.Range(0, Count).Where(i => i % 3 == 0).ToList();
-    private readonly HashSet<int> _set1 = Enumerable.Range(0, Count).Where(i => i % 2 == 0).ToHashSet();
-    private readonly HashSet<int> _set2 = Enumerable.Range(0, Count).Where(i => i % 3 == 0).ToHashSet();
-
-    [Benchmark(Baseline = true)]
-    public List<int> InterSectionList() => _list1.Intersect(_list2).ToList();
-
-    [Benchmark]
-    public HashSet<int> InterSectionHashSet()
-    {
-        var output = new HashSet<int>(_set1);
-        output.IntersectWith(_set2);
-        return output;
-    }
-}
-```
+Runtimes for the given example above:
 
 Result:
 ```csharp
