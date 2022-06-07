@@ -257,3 +257,56 @@ Results:
 |         ListAny | 92,892.521 ns | 1,848.0088 ns | 3,379.1886 ns | 75.344 |    2.48 |
 | HashSetContains |      5.019 ns |     0.1364 ns |     0.1401 ns |  0.004 |    0.00 |
 ```
+
+## Use `HashSet` for set based operations like finding the intersection of two collections
+When performing set based operations like finding the intersection or union of two collection `HashSet` can be superior to a `List`.
+Be aware that the API is a bit different with a `HashSet` as the `HashSet` is not pure and modifies the `HashSet` on which the operation is called on.
+
+❌ **Bad** Using LINQ and `List<T>` to find the intersection of two collectionss 
+```csharp
+var evenNumbers = Enumerable.Range(0, 100).Where(i => i % 2 == 0).ToList();
+var dividableByThree = Enumerable.Range(0, 100).Where(i => i % 3 == 0).ToList();
+
+var evenNumbersDividableByThree = evenNumbers.Intersect(dividableByThree).ToList();
+```
+
+✅ **Good** Using a `HashSet` to find the intersection of two collections.
+```csharp
+var evenNumbers = Enumerable.Range(0, 100).Where(i => i % 2 == 0).ToHashSet();
+var dividableByThree = Enumerable.Range(0, 100).Where(i => i % 3 == 0).ToHashSet();
+
+var evenNumbersDividableByThree = new HashSet(evenNumbers);
+evenNumbersDividableByThree.IntersectWith(dividableByThree);
+```
+
+### Benchmark
+```csharp
+public class ListVsHashSet
+{
+    private const int Count = 2_000;
+
+    private readonly List<int> _list1 = Enumerable.Range(0, Count).Where(i => i % 2 == 0).ToList();
+    private readonly List<int> _list2 = Enumerable.Range(0, Count).Where(i => i % 3 == 0).ToList();
+    private readonly HashSet<int> _set1 = Enumerable.Range(0, Count).Where(i => i % 2 == 0).ToHashSet();
+    private readonly HashSet<int> _set2 = Enumerable.Range(0, Count).Where(i => i % 3 == 0).ToHashSet();
+
+    [Benchmark(Baseline = true)]
+    public List<int> InterSectionList() => _list1.Intersect(_list2).ToList();
+
+    [Benchmark]
+    public HashSet<int> InterSectionHashSet()
+    {
+        var output = new HashSet<int>(_set1);
+        output.IntersectWith(_set2);
+        return output;
+    }
+}
+```
+
+Result:
+```csharp
+|              Method |     Mean |    Error |   StdDev | Ratio |
+|-------------------- |---------:|---------:|---------:|------:|
+|    InterSectionList | 25.69 us | 0.416 us | 0.369 us |  1.00 |
+| InterSectionHashSet | 11.88 us | 0.108 us | 0.090 us |  0.46 |
+```
