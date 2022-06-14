@@ -73,7 +73,9 @@ nav:
     - Span: advanced/span.md
     - stackalloc: advanced/stackalloc.md
     - struct: advanced/struct.md
-    
+  - EF Core:
+    - efcore/index.md
+    - Define maximum length for strings: efcore/maxlength_strings.md
 extra:
   generator: false
   social:
