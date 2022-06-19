@@ -75,11 +75,12 @@ nav:
     - struct: advanced/struct.md
   - EF Core:
     - efcore/index.md
+    - Don't track readonly entities: efcore/asnotracking.md
     - Define maximum length for strings: efcore/maxlength_strings.md
 extra:
   generator: false
   social:
-    - icon: fontawesome/brands/linkedin 
+    - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/steven-giesel/
     - icon: fontawesome/brands/github
       link: https://github.com/linkdotnet
