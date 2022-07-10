@@ -69,6 +69,7 @@ nav:
   - Advanced:
     - advanced/index.md
     - ArrayPools to minimize allocations: advanced/arraypool.md
+    - Boxing/Unboxing: advanced/boxing.md
     - Iterate through a List<T>: advanced/iterate_list.md
     - Lazy: advanced/lazy.md
     - Span: advanced/span.md
