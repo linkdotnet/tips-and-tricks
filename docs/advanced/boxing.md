@@ -23,8 +23,7 @@ private int GetSum(List<int> numbers)
 ```
 
 > 💡 Info: The same applies to `Collection<struct>` and `ICollection<struct>`. Basically everytime when you use the interface, changes are that the values get boxed.
-> LINQ queries like `Sum()` have special overloads for a bunch of primitive datatypes like `int`, `float` and so on to avoid exactly that boxing behavior.
-> Be aware if you have your custom value type, that also then boxing can apply.
+> This also happens with LINQ queries.
 
 ### Benchmark
 ```csharp
@@ -37,9 +36,7 @@ public class Benchmark
     public int GetSumOfList()
     {
         var sum = 0;
-        foreach (var number in numbersList)
-            sum += number;
-
+        foreach (var number in numbersList) { sum += number; }
         return sum;
     }
     
@@ -47,9 +44,7 @@ public class Benchmark
     public int GetSumOfIList()
     {
         var sum = 0;
-        foreach (var number in numbersIList)
-            sum += number;
-
+        foreach (var number in numbersIList) { sum += number; }
         return sum;
     }
 }
@@ -57,8 +52,57 @@ public class Benchmark
 
 Results:
 ```csharp
-|        Method |      Mean |     Error |    StdDev | Ratio | RatioSD |
-|-------------- |----------:|----------:|----------:|------:|--------:|
-|  GetSumOfList |  9.425 us | 0.0380 us | 0.0355 us |  1.00 |    0.00 |
-| GetSumOfIList | 44.019 us | 0.1565 us | 0.1464 us |  4.67 |    0.02 |
+|        Method |      Mean |     Error |    StdDev | Ratio | RatioSD | Allocated | Alloc Ratio |
+|-------------- |----------:|----------:|----------:|------:|--------:|----------:|------------:|
+|  GetSumOfList |  9.392 us | 0.0186 us | 0.0165 us |  1.00 |    0.00 |         - |          NA |
+| GetSumOfIList | 44.098 us | 0.3359 us | 0.3142 us |  4.69 |    0.03 |      40 B |          NA |
+```
+
+## Using `List<struct>` in LINQ queries will box the value
+As LINQ queries are built upon `IEnumerable<T>` passing a list of value types to a LINQ query will box those values. This is especially unwanted in high performance path in your application.
+
+❌ **Bad** Using LINQ query to get the sum of a `List<int>`.
+```csharp
+List<int> numbers = GetNumbers();
+
+var sum = numbers.Sum(); // This will box the values inside numbers
+```
+
+✅ **Good** Use foreach with the enumerator of the list to avoid boxing.
+```csharp
+List<int> numbers = GetNumbers();
+
+var sum = 0;
+foreach (var number in numbers)
+    sum += number;
+```
+
+### Benchmark
+```csharp
+public class Benchmark
+{
+    private readonly List<int> numbersList = Enumerable.Range(0, 10_000).ToList();
+
+    [Benchmark(Baseline = true)]
+    public int GetSumViaForeachList()
+    {
+        var sum = 0;
+        foreach (var number in numbersList)
+            sum += number;
+
+        return sum;
+    }
+
+    [Benchmark]
+    public int GetSumViaLINQ() => numbersList.Sum();
+}
+
+```
+
+Results:
+```csharp
+|               Method |      Mean |     Error |    StdDev | Ratio | RatioSD | Allocated | Alloc Ratio |
+|--------------------- |----------:|----------:|----------:|------:|--------:|----------:|------------:|
+| GetSumViaForeachList |  9.391 us | 0.0210 us | 0.0176 us |  1.00 |    0.00 |         - |          NA |
+|        GetSumViaLINQ | 43.778 us | 0.1257 us | 0.1176 us |  4.66 |    0.02 |      40 B |          NA |
 ```
