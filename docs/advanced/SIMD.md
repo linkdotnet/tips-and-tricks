@@ -2,7 +2,7 @@
 SIMD describes the ability the process a single operation simultaneously on multiple data. This can give a big edge on independent data which can be processed in parallel. More information can be found [here](https://steven-giesel.com/blogPost/d80d9367-3a1f-407f-9bdb-067fae9ea527).
 
 ## Compare two lists with SIMD
-To speed-up the process of two lists, we can vectorize those lists and compare multiple chunks in parallel. To vectorize a list we can use **SSE** (**S**IMD **S**treaming **E**xtensions) in combination with some helper tools from the .NET Framework itself.
+To speed-up the process of two lists, we can vectorize those lists and compare multiple chunks in parallel. To vectorize a list we can use **SSE** (**S** IMD **S** treaming **E** xtensions) in combination with some helper tools from the .NET Framework itself.
 
 ❌ **Bad** Use LINQ queries, which can be slow.
 ```csharp
@@ -17,7 +17,8 @@ public bool SIMDContains()
     if (list1.Count != list2.Count)
         return false;
 
-    // Create a Span<Vector<int>> from our original list. We don't have to worry about the internal size, etc...
+    // Create a Span<Vector<int>> from our original list.
+    // We don't have to worry about the internal size, etc...
     var list1AsVector = MemoryMarshal.Cast<int, Vector<int>>(CollectionsMarshal.AsSpan(list1));
     var list2AsVector = MemoryMarshal.Cast<int, Vector<int>>(CollectionsMarshal.AsSpan(list2));
 
