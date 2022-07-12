@@ -25,4 +25,4 @@ var blogPosts = await DbContext.Blog
  .ToListAsync();
 ```
 
-> 💡 Info: There are database which support multiple result sets in one query (for example SQL Server with **M**ultiple **A**ctive **R**esult **S**et). Here the performance is even better. For more information checkout the official Microsoft page about [`SplitQuery`](https://docs.microsoft.com/en-us/ef/core/querying/single-split-queries).
+> 💡 Info: There are database which support multiple result sets in one query (for example SQL Server with **M** ultiple **A** ctive **R** esult **S** et). Here the performance is even better. For more information checkout the official Microsoft page about [`SplitQuery`](https://docs.microsoft.com/en-us/ef/core/querying/single-split-queries).
