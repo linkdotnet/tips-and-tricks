@@ -58,7 +58,7 @@ Results:
 | GetSumOfIList | 44.098 us | 0.3359 us | 0.3142 us |  4.69 |    0.03 |      40 B |          NA |
 ```
 
-## Using `List<struct>` in LINQ queries will box the value
+## Using `List<struct>` in LINQ queries will box the enumerator
 As LINQ queries are built upon `IEnumerable<T>` passing a list of value types to a LINQ query will box the enumerator. This is especially unwanted in high performance path in your application.
 
 ❌ **Bad** Using LINQ query to get the sum of a `List<int>`.
