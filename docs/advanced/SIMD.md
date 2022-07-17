@@ -102,6 +102,33 @@ public int SumSIMD()
 ```
 
 ### Benchmark
+```csharp
+public class Benchmark
+{
+    private readonly List<int> _list = Enumerable.Range(0, 1_000).ToList();
+    
+    [Benchmark(Baseline = true)]
+    public int ListSort() => _list.Sum();
+
+    [Benchmark]
+    public int SumSIMD()
+    {
+        var accVector = Vector<int>.Zero;
+
+        // For any array use
+        // var spanOfVectors = MemoryMarshal.Cast<int, Vector<int>>(new Span<int>(myArray));
+        var spanOfVectors = MemoryMarshal.Cast<int, Vector<int>>(CollectionsMarshal.AsSpan(_list));
+        foreach (var vector in spanOfVectors)
+        {
+            accVector = Vector.Add(accVector, vector);
+        }
+
+        // Scalar-Product of our vector against the Unit vector is its sum
+        var result = Vector.Dot(accVector, Vector<int>.One);
+        return result;
+    }
+}
+```
 Results:
 ```csharp
 |   Method |       Mean |    Error |   StdDev | Ratio |
