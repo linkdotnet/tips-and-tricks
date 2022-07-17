@@ -72,3 +72,40 @@ Results:
 | LINQSequenceEquals | 3,487.4 ns | 13.72 ns | 10.71 ns |  1.00 |
 |       SIMDContains |   137.3 ns |  0.98 ns |  0.91 ns |  0.04 |
 ```
+
+## Get the sum of a list or array
+SIMD can be used to divide and conquer the problem of retrieving the sum of a list. The idea is to cut the list in smaller chunks and add them up via SIMD instuctions. This approach can faster the speed significantly.
+
+❌ **Bad** Using plain old LINQ to get a sum of a list or array of integers.
+```csharp
+_list.Sum();
+```
+
+✅ **Good** Using SIMD instructions to divide and conquer and parallelize the addition of the individual vectors.
+```csharp
+public int SumSIMD()
+{
+    var accVector = Vector<int>.Zero;
+
+    // For any array use
+    // var spanOfVectors = MemoryMarshal.Cast<int, Vector<int>>(new Span<int>(myArray));
+    var spanOfVectors = MemoryMarshal.Cast<int, Vector<int>>(CollectionsMarshal.AsSpan(_list));
+    foreach (var vector in spanOfVectors)
+    {
+        accVector = Vector.Add(accVector, vector);
+    }
+
+    // Scalar-Product of our vector against the Unit vector is its sum
+    var result = Vector.Dot(accVector, Vector<int>.One);
+    return result;
+}
+```
+
+### Benchmark
+Results:
+```csharp
+|   Method |       Mean |    Error |   StdDev | Ratio |
+|--------- |-----------:|---------:|---------:|------:|
+| ListSort | 4,493.1 ns | 88.84 ns | 83.10 ns |  1.00 |
+|  SumSIMD |   117.7 ns |  0.44 ns |  0.41 ns |  0.03 |
+```
