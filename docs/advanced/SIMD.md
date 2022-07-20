@@ -108,7 +108,7 @@ public class Benchmark
     private readonly List<int> _list = Enumerable.Range(0, 1_000).ToList();
     
     [Benchmark(Baseline = true)]
-    public int ListSort() => _list.Sum();
+    public int ListSum() => _list.Sum();
 
     [Benchmark]
     public int SumSIMD()
@@ -131,8 +131,8 @@ public class Benchmark
 ```
 Results:
 ```csharp
-|   Method |       Mean |    Error |   StdDev | Ratio |
-|--------- |-----------:|---------:|---------:|------:|
-| ListSort | 4,493.1 ns | 88.84 ns | 83.10 ns |  1.00 |
-|  SumSIMD |   117.7 ns |  0.44 ns |  0.41 ns |  0.03 |
+|  Method |       Mean |    Error |   StdDev | Ratio |
+|-------- |-----------:|---------:|---------:|------:|
+| ListSum | 4,493.1 ns | 88.84 ns | 83.10 ns |  1.00 |
+| SumSIMD |   117.7 ns |  0.44 ns |  0.41 ns |  0.03 |
 ```
