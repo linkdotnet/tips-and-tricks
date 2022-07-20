@@ -13,7 +13,7 @@ var isEqual = list1.SequenceEquals(list2);
 ```csharp
 public bool SIMDContains()
 {
-    // Lists are not equal when the count is differnet
+    // Lists are not equal when the count is different
     if (list1.Count != list2.Count)
         return false;
 
