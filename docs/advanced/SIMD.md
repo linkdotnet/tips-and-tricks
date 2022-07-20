@@ -46,7 +46,7 @@ public class Benchmark
     public bool LINQSequenceEquals() => list1.SequenceEqual(list2);
 
     [Benchmark]
-    public bool SIMDContains()
+    public bool SIMDEquals()
     {
         if (list1.Count != list2.Count)
             return false;
@@ -70,7 +70,7 @@ Results:
 |             Method |       Mean |    Error |   StdDev | Ratio |
 |------------------- |-----------:|---------:|---------:|------:|
 | LINQSequenceEquals | 3,487.4 ns | 13.72 ns | 10.71 ns |  1.00 |
-|       SIMDContains |   137.3 ns |  0.98 ns |  0.91 ns |  0.04 |
+|         SIMDEquals |   137.3 ns |  0.98 ns |  0.91 ns |  0.04 |
 ```
 
 ## Get the sum of a list or array
