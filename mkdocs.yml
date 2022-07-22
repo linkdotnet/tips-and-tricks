@@ -74,6 +74,7 @@ nav:
     - efcore/index.md
     - Don't track readonly entities: efcore/asnotracking.md
     - Define maximum length for strings: efcore/maxlength_strings.md
+    - In Memory database with SQLite: efcore/in_memory_sqlite.md
     - SplitQuery: efcore/splitquery.md
   - NuGet:
     - nuget/index.md 

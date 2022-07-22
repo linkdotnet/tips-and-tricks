@@ -1,6 +1,7 @@
 ## In-Memory database with SQLite
 
 SQLite can be used as an in-memory database for your code. This brings big advantage in testing. The database is transient, that means as soon as the connection gets closed the memory is freed. One downside is that the in-memory database is not thread-safe by default. This is achieved with the special `:memory:` data source.
+The advantage over the In-Memory database package provided via `Microsoft.EntityFrameworkCore.InMemory` that the SQLite version behaves closer to a real rational database.
 
 ```csharp
 var connection = new SqliteConnection("DataSource=:memory:");
