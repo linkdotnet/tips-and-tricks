@@ -37,12 +37,6 @@ markdown_extensions:
   - pymdownx.caret
   - pymdownx.critic
   - pymdownx.details
-  #- pymdownx.emoji:
-  #    emoji_index: !!python/name:pymdownx.emoji.twemoji
-  #    emoji_generator: !!python/name:pymdownx.emoji.to_svg
-  #- pymdownx.emoji:
-  #    emoji_index: !!python/name:materialx.emoji.twemoji
-  #    emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.inlinehilite
   - pymdownx.magiclink
   - pymdownx.mark
@@ -82,6 +76,7 @@ nav:
     - Define maximum length for strings: efcore/maxlength_strings.md
     - SplitQuery: efcore/splitquery.md
   - NuGet:
+    - nuget/index.md 
     - Use floating versioning: nuget/floating_versioning.md
 extra:
   generator: false
