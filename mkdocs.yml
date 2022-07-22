@@ -81,6 +81,8 @@ nav:
     - Don't track readonly entities: efcore/asnotracking.md
     - Define maximum length for strings: efcore/maxlength_strings.md
     - SplitQuery: efcore/splitquery.md
+  - NuGet:
+    - Use floating versioning: nuget/floating_versioning.md
 extra:
   generator: false
   social:
