@@ -26,3 +26,5 @@ options.UseSqlite(connection);
 ```
 
 The database gets cleaned up when there is no active connection anymore.
+
+> 💡 Info: You have to install the [`Microsoft.EntityFrameworkCore.Sqlite`](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Sqlite/) package to use the `UseSqlite` method.
