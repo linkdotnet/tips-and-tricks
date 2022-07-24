@@ -73,3 +73,26 @@ protected override void OnInitialized()
     }, null, 500, 500);
 }
 ```
+
+## Use `JSImport` or `JSExport` attributes to simplify the interop
+With .NET 7 developers can use `JSImportAttribute` to automatically import a javascript function into dotnet and use it as regular C# function. Also the opposite is possible. This only works on client-side Blazor (also called Blazor WASM).
+
+```csharp
+// We have to mark our class partial otherwise SourceCodeGenerator can't add code
+public partial class MyComponent
+{
+  // Super easy way to import a Javascript function to .NET
+  [JSImport("console.log")]
+  static partial void Log(string message);
+  
+  // We can also export functions, so that we can use them in JavaScript
+  // Dotnet will take care of marshalling
+  [JSExport]
+  [return: JSMarshalAs<JSType.Date>]
+  public static DateTime Now()
+  {
+      return DateTime.Now;
+  }
+  
+  // The imported functions can be called like every other .NET function
+```
