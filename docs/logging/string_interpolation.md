@@ -7,6 +7,7 @@ With that you will loose the ability to search for the format values.
 ```csharp
 User user = GetUserFromAPI();
 DateTime when = DateTime.UtcNow;
+
 _logger.LogInformation($"Creating user: {user} at {when}");
 ```
 
@@ -14,5 +15,6 @@ _logger.LogInformation($"Creating user: {user} at {when}");
 ```csharp
 User user = GetUserFromAPI();
 DateTime when = DateTime.UtcNow;
+
 _logger.LogInformation("Creating user: {User} at {When} ", user, when);
 ```
