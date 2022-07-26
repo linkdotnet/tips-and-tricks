@@ -10,7 +10,7 @@ DateTime when = DateTime.UtcNow;
 _logger.LogInformation($"Creating user: {user} at {when}");
 ```
 
-✅ **Good** good
+✅ **Good** Use structured logging to preserve format information.
 ```csharp
 User user = GetUserFromAPI();
 DateTime when = DateTime.UtcNow;
