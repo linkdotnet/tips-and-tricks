@@ -78,6 +78,7 @@ nav:
     - SplitQuery: efcore/splitquery.md
   - Logging:
     - logging/index.md
+    - Compile-time logging source generator: logging/compiletime_logging.md
     - Don't use string interpolation: logging/string_interpolation.md
   - NuGet:
     - nuget/index.md 
