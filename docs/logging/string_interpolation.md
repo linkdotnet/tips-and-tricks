@@ -16,5 +16,5 @@ _logger.LogInformation($"Creating user: {user} at {when}");
 User user = GetUserFromAPI();
 DateTime when = DateTime.UtcNow;
 
-_logger.LogInformation("Creating user: {User} at {When} ", user, when);
+_logger.LogInformation("Creating user: {User} at {When}", user, when);
 ```
