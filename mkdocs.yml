@@ -76,6 +76,9 @@ nav:
     - Define maximum length for strings: efcore/maxlength_strings.md
     - In Memory database with SQLite: efcore/in_memory_sqlite.md
     - SplitQuery: efcore/splitquery.md
+  - Logging:
+    - logging/index.md
+    - Don't use string interpolation: logging/string_interpolation.md
   - NuGet:
     - nuget/index.md 
     - Use floating versioning: nuget/floating_versioning.md
