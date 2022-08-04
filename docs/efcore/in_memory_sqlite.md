@@ -13,7 +13,7 @@ options.UseSqlite(connection);
 });
 ```
 
-To make it work with multiple connections at a time, we can utilize the `` identifier for the data source. More information can be found on the [official website](https://www.sqlite.org/inmemorydb.html#sharedmemdb).
+To make it work with multiple connections at a time, we can utilize the `cache=shared` identifier for the data source. More information can be found on the [official website](https://www.sqlite.org/inmemorydb.html#sharedmemdb).
 
 ```csharp
 var connection = new SqliteConnection("DataSource=myshareddb;mode=memory;cache=shared");
