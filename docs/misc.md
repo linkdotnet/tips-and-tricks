@@ -179,7 +179,7 @@ public enum WeekendDay
 ```
 
 `3` is not a valid `WeekendDay` therefore `false` sure thing. But unfortunately no. The output is 
-> Could parse: true
+> Could parse: true  
 > Value: 3
 
 You can try this on out [sharplab.io](https://sharplab.io/#v2:EYLgtghglgdgNAFxAJwK7wCYgNQB8ACATAIwCwAUBQG4TIAEAxgPaoA2GACrQM4CmdAXjoBRGKjAA6ACrIAnl2R8AFACIAzCrh0WCOgHVevANa8YGACIRZdAO6GTZy7ICUAbgoV8xAJxKAJCoAwizsdAAOPLwgdADezGyckQC+Km6ePv4qAGoQrKhRsXbGphZWKWmU5PhqdKbi+vYlThQxFHTtdADKEAioyBhWgnQADHBtHZ3oA9ZCxGPkSUA===) if you want.
