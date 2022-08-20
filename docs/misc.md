@@ -159,3 +159,38 @@ Results for the given example above:
 |   WithoutFinalizer |   2.205 ns | 0.1230 ns | 0.1416 ns |  1.00 |    0.00 | 0.0057 |      - |      24 B |
 | WithEmptyFinalizer | 144.038 ns | 2.9594 ns | 6.1773 ns | 65.32 |    4.19 | 0.0057 | 0.0029 |      24 B |
 ```
+
+## `Enum.TryParse` unexpected behavior
+
+[`Enum.TryParse`](https://docs.microsoft.com/en-us/dotnet/api/system.enum.tryparse?view=net-6.0) parses a string and tries to convert it into a valid representation of a given enum.
+If the operation is successful it returns `true`, otherwise `false`. Have a look at the following code. What will be the output of that code? 
+
+```csharp
+var couldParse = Enum.TryParse("3", out WeekendDay weekendDay);
+
+Console.WriteLine($"Could parse: {couldParse}");
+Console.WriteLine($"Value: {weekendDay}");
+
+public enum WeekendDay
+{
+    Saturday = 0,
+    Sunday = 1,
+}
+```
+
+`3` is not a valid `WeekendDay` therefore `false` sure thing. But unfortunately no. The output is 
+> Could parse: true
+> Value: 3
+
+You can try this on out [sharplab.io](https://sharplab.io/#v2:EYLgtghglgdgNAFxAJwK7wCYgNQB8ACATAIwCwAUBQG4TIAEAxgPaoA2GACrQM4CmdAXjoBRGKjAA6ACrIAnl2R8AFACIAzCrh0WCOgHVevANa8YGACIRZdAO6GTZy7ICUAbgoV8xAJxKAJCoAwizsdAAOPLwgdADezGyckQC+Km6ePv4qAGoQrKhRsXbGphZWKWmU5PhqdKbi+vYlThQxFHTtdADKEAioyBhWgnQADHBtHZ3oA9ZCxGPkSUA===) if you want.
+
+✅ **Good** Use `Enum.IsDefined` to check if a given value is in the correct range.
+With [`Enum.IsDefined`](https://docs.microsoft.com/en-us/dotnet/api/system.enum.isdefined?view=net-6.0) we can check if the value is correct for a given enum.
+
+```csharp
+var couldParse = Enum.TryParse("3", out WeekendDay weekendDay);
+if (couldParse && Enum.IsDefined(typeof(WeekendDay), weekendDay))
+{
+	// Only here we have a valid value for WeekendDay
+}
+```
