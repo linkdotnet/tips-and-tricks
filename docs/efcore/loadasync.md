@@ -32,7 +32,7 @@ await query.Include(x => x.BookCategories)
     .ThenInclude(x => x.Category).LoadAsync();
 await query.Include(x => x.Author).LoadAsync();
 await query.Include(x => x.Author.Biography).LoadAsync();
-return await query.ToListAsync();;
+return await query.ToListAsync();
 ```
 
 Which will be translated into:
