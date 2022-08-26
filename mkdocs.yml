@@ -84,6 +84,9 @@ nav:
   - NuGet:
     - nuget/index.md 
     - Use floating versioning: nuget/floating_versioning.md
+  - Regular Expressions
+    - regex/index.md
+    - RegExOptions: regex/regex_options.md
 extra:
   generator: false
   social:
