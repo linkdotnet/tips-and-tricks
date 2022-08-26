@@ -87,6 +87,7 @@ nav:
   - Regular Expressions
     - regex/index.md
     - RegExOptions: regex/regex_options.md
+    - Right to left search: regex/right_to_left.md
 extra:
   generator: false
   social:
