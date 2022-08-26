@@ -84,7 +84,7 @@ nav:
   - NuGet:
     - nuget/index.md 
     - Use floating versioning: nuget/floating_versioning.md
-  - Regular Expressions
+  - Regular Expressions:
     - regex/index.md
     - RegExOptions: regex/regex_options.md
     - Right to left search: regex/right_to_left.md
