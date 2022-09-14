@@ -32,7 +32,7 @@ public class LazyBenchmark
     [Benchmark]
     public int Lazy()
     {
-        var lazy = new Lazy<MyClass>(() => new MyClass(), isThreadSafe: false);
+        var lazy = new Lazy<MyClass>(() => new MyClass(), Option);
         return lazy.Value.MyFunc();
     }
 }
