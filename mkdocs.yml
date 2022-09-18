@@ -65,6 +65,7 @@ nav:
     - ArrayPools to minimize allocations: advanced/arraypool.md
     - Boxing/Unboxing: advanced/boxing.md
     - Iterate through a List<T>: advanced/iterate_list.md
+    - Lambda vs method group: advanced/lambda_methodgroup.md
     - Lazy: advanced/lazy.md
     - SIMD: advanced/SIMD.md
     - Span: advanced/span.md
