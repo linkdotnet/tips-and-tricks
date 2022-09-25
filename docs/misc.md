@@ -194,3 +194,41 @@ if (couldParse && Enum.IsDefined(typeof(WeekendDay), weekendDay))
 	// Only here we have a valid value for WeekendDay
 }
 ```
+
+## Be careful of closures
+Closures are "attached" to their parent to close over a certain variable. Basically the anonymous function / lambda is taking an argument outside of his own scope.
+The following code demonstrates such behavior:
+```csharp
+var list = new List<Action>();
+
+for(var i = 0; i < 5; i++)
+    list.Add(() => Console.WriteLine(i));
+
+list.ForEach(action => action());
+```
+
+And here is the pitfall. The snippet might print something unexpecting:
+```no-class
+5
+5
+5
+5
+5
+```
+The reason is that behind the scenes the closures creates an anonymous class, which holds a reference to `i` (instead if a copy). That will lead to that all `Action`s point to the same reference of `i`, which after the for loop is `5`. The way to fix this is the following:
+
+```csharp
+var list = new List<Action>();
+
+for (var i = 0; i < 5; i++)
+{
+    var t = i;
+    list.Add(() => Console.WriteLine(t));
+}
+
+list.ForEach(action => action());
+```
+
+This works because copying an interger to a temporary variable will result in a new reference behind the scenes. You can fiddle around with that example on [sharplab.io](https://sharplab.io/#v2:D4AQDABCCMAsDcBYAUCATNFKBuBDAThADYCWAzgC4QC8EAdgKYDuEAMuRQDwxoB8AFAEokyFADMA9oX55CJGhDDwI8zhACsykgGptglAG8UEE8Q4A6AIIATa/yE1eUaAE5+JQcJQBfLMlKU5gBiUgCiuADGABb8kRQkEnSOEHEJdELCQA===).
+
+Additionally adding the `static` keyword to an anonymous function will prohibit any closures. So `list.Add(() => Console.WriteLine(i));` will result in an compiler error.
