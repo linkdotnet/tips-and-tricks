@@ -266,3 +266,27 @@ async Task DoOperationAsync()
 	await Task.Delay(500);
 } 
 ```
+
+## `ConfigureAwait` with `await using` statement
+Since C# 8 you can provide an `IAsyncDisposable` which allows to have asynchrnous code in the `Dispose` method. Also this allows to call the following construct:
+
+```csharp
+await using var dbContext = await dbContextFactory.CreateDbContextAsync().ConfigureAwait(false);
+```
+
+In this example `CreateDbContextAsync` uses the `ConfigureAwait(false)` but **not** the `IAsyncDisposable`. To make that work we have to break apart the statment like this:
+
+```csharp
+var dbContext = await dbContextFactory.CreateDbContextAsync().ConfigureAwait(false);
+await using (dbContext.ConfigureAwait(false))
+{
+	// ...
+}
+```
+
+The last part has the "ugly" snippet that you have to introduce a new "block" for the `using` statement. For that there is a easy workaround:
+```csharp
+var blogDbContext = await dbContextFactory.CreateDbContextAsync().ConfigureAwait(false);
+await using var _ = blogDbContext.ConfigureAwait(false);
+// You don't need the {} block here
+```
