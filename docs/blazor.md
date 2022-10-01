@@ -96,3 +96,26 @@ public partial class MyComponent
   
   // The imported functions can be called like every other .NET function
 ```
+
+## Cancelling a navigation
+Since .net 7 it is possible to intercept a navigation request, which either goes to an internal or external page. For that we can utilize the `NavigationLock` component. It distinguishes between internal and external calls. External calls are always handled via a JS popup. The same can be used for internal calls as well.
+
+```csharp
+@inject IJSRuntime JSRuntime
+
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" ConfirmExternalNavigation="true" />
+
+@code {
+    private async Task OnBeforeInternalNavigation(LocationChangingContext context)
+    {
+        // This just displays the built-in browser confirm dialog, but you can display a custom prompt
+        // for internal navigations if you want.
+        var isConfirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to continue?");
+
+        if (!isConfirmed)
+        {
+            context.PreventNavigation();
+        }
+    }
+}
+```
