@@ -55,6 +55,7 @@ nav:
   - Async / Await: async_await.md
   - Blazor: blazor.md
   - Collections: collections.md
+  - Debugging: debugging.md
   - Exceptions: exceptions.md
   - LINQ: linq.md
   - Misc: misc.md
