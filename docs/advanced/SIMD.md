@@ -136,3 +136,59 @@ Results:
 | ListSum | 4,493.1 ns | 88.84 ns | 83.10 ns |  1.00 |
 | SumSIMD |   117.7 ns |  0.44 ns |  0.41 ns |  0.03 |
 ```
+
+## Getting Minimum and Maximum of a list
+SIMD can be used to get the smallest and the largest number in a given list.
+
+```csharp
+public (int min, int max) GetMinMaxSIMD()
+{
+    var vectors = MemoryMarshal.Cast<int, Vector<int>>(CollectionsMarshal.AsSpan(_numbers));
+    var vMin = new Vector<int>(int.MaxValue);
+    var vMax = new Vector<int>(int.MinValue);
+    foreach (var vector in vectors)
+    {
+        vMin = Vector.Min(vMin, vector);
+        vMax = Vector.Max(vMax, vector);
+    }
+
+    var min = int.MaxValue;
+    var max = int.MinValue;
+
+    for (var i = 0; i < Vector<int>.Count; i++)
+    {
+        min = Math.Min(vMin[i], min);
+        max = Math.Max(vMax[i], min);
+    }
+
+    return (min, max);
+}
+```
+
+The traditional versionl, could look like this:
+```csharp
+public (int min, int max) GetMinMax()
+{
+    var min = int.MaxValue;
+    var max = int.MinValue;
+
+    for (var i = 0; i < _numbers.Count; i++)
+    {
+        min = Math.Min(_numbers[i], min);
+        max = Math.Max(_numbers[i], min);
+    }
+
+    return (min, max);
+}
+```
+
+Results:
+
+The given Llist (`_numbers`) has 10000 entries.
+
+```csharp
+|        Method |      Mean |     Error |    StdDev | Ratio | Rank |
+|-------------- |----------:|----------:|----------:|------:|-----:|
+| GetMinMaxSIMD |  1.544 us | 0.0050 us | 0.0047 us |  0.10 |    1 |
+|     GetMinMax | 15.763 us | 0.0435 us | 0.0407 us |  1.00 |    2 |
+```
