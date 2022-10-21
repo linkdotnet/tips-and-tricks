@@ -179,7 +179,7 @@ class MyClass
 > 💡 Info: More details can be found [here.](https://steven-giesel.com/blogPost/3b55d5ac-f62c-4b86-bfa3-62670f614761)
 
 ## Preserving the stack trace of an exception
-When catching an exception and re-throwing the exception via `throw exc` later the stack-trace gets altered, but sometimes capturing the exception can make sense. Since the .NET Framework 4.5 there is a small helper.
+When catching an exception and re-throwing the exception via `throw exc` later the stack-trace gets altered, but sometimes capturing the exception can make sense. Since the .NET Framework 4.5 there is a small helper named [`ExceptionDispatchInfo`](https://learn.microsoft.com/en-us/dotnet/api/system.runtime.exceptionservices.exceptiondispatchinfo?view=net-6.0), which let's you preserve that information. It offers a `Throw` method, which re-throws the saved exception with the given stack-trace.
 
 ❌ **Bad** Re-throwing the exception while losing the stack-trace
 ```csharp
