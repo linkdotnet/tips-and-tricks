@@ -177,3 +177,66 @@ class MyClass
 ```
 
 > 💡 Info: More details can be found [here.](https://steven-giesel.com/blogPost/3b55d5ac-f62c-4b86-bfa3-62670f614761)
+
+## Preserving the stack trace of an exception
+When catching an exception and re-throwing the exception via `throw exc` later the stack-trace gets altered, but sometimes capturing the exception can make sense. Since the .NET Framework 4.5 there is a small helper.
+
+❌ **Bad** Re-throwing the exception while losing the stack-trace
+```csharp
+Exception? exception = null;
+
+try
+{
+    Throws();
+}
+catch (Exception exc)
+{
+    exception = exc;
+}
+
+// Do something here ...
+
+if (exception is not null)
+    throw exception;
+
+void Throws() => throw new Exception("💣");
+```
+
+Produces the following output:
+```no-class
+Unhandled exception. System.Exception: 💣
+   at Program.<Main>$(String[] args) in /Users/stgi/repos/Exception/Program.cs:line 15
+
+```
+
+✅ **Good** Capturing the context to re-throw it later.
+```csharp
+using System.Runtime.ExceptionServices;
+
+ExceptionDispatchInfo? exceptionDispatchInfo;
+
+try
+{
+    Throws();
+}
+catch (Exception exc)
+{
+    exceptionDispatchInfo = ExceptionDispatchInfo.Capture(exc);
+}
+
+// Do something here ...
+
+if (exceptionDispatchInfo is not null)
+    exceptionDispatchInfo.Throw();
+
+void Throws() => throw new Exception("💣");
+```
+
+Produces the following output:
+```no-class
+Unhandled exception. System.Exception: 💣
+   at Program.<<Main>$>g__Throws|0_0() in /Users/stgi/repos/Exception/Program.cs:line 19
+   at Program.<Main>$(String[] args) in /Users/stgi/repos/Exception/Program.cs:line 7
+--- End of stack trace from previous location ---
+   at Program.<Main>$(String[] args) in /Users/stgi/repos/Exception/Program.cs:line 17
+```
