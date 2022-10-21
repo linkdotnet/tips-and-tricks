@@ -1,7 +1,7 @@
 # Tips and tricks
 A collection of tips, tricks and smaller pitfalls with smaller code snippets and explanation.
 
-Right now there are **70+** entries in the collection.
+Right now there are **75+** entries in the collection.
 The page has multiple sections divided by topic like `async`/`await` or `Blazor` and should give a good overview over common scenarios.
 
 Go ahead to the official page here: [tips and tricks](https://linkdotnet.github.io/tips-and-tricks).
