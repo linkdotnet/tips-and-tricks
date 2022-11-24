@@ -1,10 +1,10 @@
 # strings
-This chapter shows some tips, tricks and pitfalls in combinations with `string`'s.
+This chapter shows some tips, tricks and pitfalls in combination with `string`'s.
 
 ## Use `StringBuilder` when concatenating a lot of strings
-As `string`'s are immutable in C# concatenating those will result in many allocations and loss of performance. In scenarios where many strings get concatenated a [`StringBuilder`](https://docs.microsoft.com/en-us/dotnet/api/system.text.stringbuilder?view=net-6.0) is preferred. The same applies for operations like `string.Join` or adding a single character to a `string`.
+As `string`'s are immutable in C# concatenating those will result in many allocations and loss of performance. In scenarios where many strings get concatenated a [`StringBuilder`](https://docs.microsoft.com/en-us/dotnet/api/system.text.stringbuilder?view=net-6.0) is preferred. The same applies for operations like `string.Join` or add a single character to a `string`.
 
-❌ **Bad** Will use a lot of allocations and will result in performance penalty.
+❌ **Bad** Will use a lot of allocations and will result in a performance penalty.
 ```csharp
 var outputString = "";
 

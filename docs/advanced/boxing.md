@@ -2,9 +2,9 @@
 This chapter shows (hidden) pitfalls in terms of boxing and unboxing.
 
 ## Enumerate through `IList<struct>` vs `List<struct>`
-When you call `List<struct>.GetEnumerator()` (which will be done in every foreach loop) you get a struct named `Enumerator`. When calling `IList<struct>.GetEnumerator()` you get a variable of type `IEnumerator<struct>`, which contains a boxed version of your value type. In performance critical section this can be important.
+When you call `List<struct>.GetEnumerator()` (which will be done in every foreach loop) you get a struct named `Enumerator`. When calling `IList<struct>.GetEnumerator()` you get a variable of type `IEnumerator<struct>`, which contains a boxed version of your value type. In the performance critical section, this can be important.
 
-❌ **Bad** This will box every individual integer in the list when enuemrated through.
+❌ **Bad** This will box every individual integer in the list when enumerated through.
 ```csharp
 private int GetSum(IList<int> numbers)
 {
