@@ -64,3 +64,45 @@ Output:
 To summarize: `string.Length` will give return the internal array size not the length of printed characters. `StringInfo.LengthInTextElements` will return the amount of printed characters.
 
 > 💡 Info: Some more information about Unicode, UTF-8, UTF-16 and UTF-32 can be found [here](https://medium.com/bobble-engineering/emojis-from-a-programmers-eye-ca65dc2acef0).
+
+## Use `StringComparison` instead of `ToLowerCase` or `ToUpperCase` for insensitive comparison
+
+Lots of code is using `"ABC".ToLowerCase() == "abc".ToLowerCase()` to compare two strings, when casing doesn't matter. The problem with that code is `ToLowerCase` as well as `ToUpperCase` creates a new string instance, resulting in unnecessary allocations and performance loss. 
+
+
+❌ **Bad** Using new allocations for comparing strings.
+```csharp
+var areStringsEqual = "abc".ToUpperCase() == "ABC".ToUpperCase();
+```
+
+✅ **Good** Use of the `string.`Equals` overload with the appropriate `StringComparison` technique.
+```csharp
+var areStringsEqual = string.Equals("ABC", "abc", StringComparison.OrdinalIgnoreCase);
+```
+
+### Benchmark
+```csharp
+[MemoryDiagnoser]
+public class StringBenchmark
+{
+    [Benchmark(Baseline = true)]
+    [Arguments(
+        "HellO WoRLD, how are you? You are doing good?",
+        "hElLO wOrLD, how Are you? you are doing good?")]
+    public bool AreEqualToLower(string a, string b) => a.ToLower() == b.ToLower();
+
+    [Benchmark(Baseline = false)]
+    [Arguments(
+        "HellO WoRLD, how are you? You are doing good?",
+        "hElLO wOrLD, how Are you? you are doing good?")]
+    public bool AreEqualStringComparison(string a, string b) => string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
+}
+```csharp
+
+Results:
+```
+|                   Method |                    a |                    b |     Mean |    Error |   StdDev | Ratio |   Gen0 | Allocated | Alloc Ratio |
+|------------------------- |--------------------- |--------------------- |---------:|---------:|---------:|------:|-------:|----------:|------------:|
+|          AreEqualToLower | HellO(...)good? [45] | hElLO(...)good? [45] | 60.93 ns | 1.008 ns | 0.943 ns |  1.00 | 0.0356 |     224 B |        1.00 |
+| AreEqualStringComparison | HellO(...)good? [45] | hElLO(...)good? [45] | 16.10 ns | 0.030 ns | 0.028 ns |  0.26 |      - |         - |        0.00 |
+```
