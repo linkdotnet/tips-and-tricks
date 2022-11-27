@@ -83,6 +83,7 @@ var areStringsEqual = string.Equals("ABC", "abc", StringComparison.OrdinalIgnore
 ### Benchmark
 ```csharp
 [MemoryDiagnoser]
+[HideColumns(Column.Arguments)]
 public class StringBenchmark
 {
     [Benchmark(Baseline = true)]
@@ -97,12 +98,12 @@ public class StringBenchmark
         "hElLO wOrLD, how Are you? you are doing good?")]
     public bool AreEqualStringComparison(string a, string b) => string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
 }
-```csharp
+```
 
 Results:
 ```
-|                   Method |                    a |                    b |     Mean |    Error |   StdDev | Ratio |   Gen0 | Allocated | Alloc Ratio |
-|------------------------- |--------------------- |--------------------- |---------:|---------:|---------:|------:|-------:|----------:|------------:|
-|          AreEqualToLower | HellO(...)good? [45] | hElLO(...)good? [45] | 60.93 ns | 1.008 ns | 0.943 ns |  1.00 | 0.0356 |     224 B |        1.00 |
-| AreEqualStringComparison | HellO(...)good? [45] | hElLO(...)good? [45] | 16.10 ns | 0.030 ns | 0.028 ns |  0.26 |      - |         - |        0.00 |
+|                   Method |     Mean |    Error |   StdDev | Ratio |   Gen0 | Allocated | Alloc Ratio |
+|------------------------- |---------:|---------:|---------:|------:|-------:|----------:|------------:|
+|          AreEqualToLower | 60.93 ns | 1.008 ns | 0.943 ns |  1.00 | 0.0356 |     224 B |        1.00 |
+| AreEqualStringComparison | 16.10 ns | 0.030 ns | 0.028 ns |  0.26 |      - |         - |        0.00 |
 ```
