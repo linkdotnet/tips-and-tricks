@@ -107,3 +107,36 @@ Results:
 |          AreEqualToLower | 60.93 ns | 1.008 ns | 0.943 ns |  1.00 | 0.0356 |     224 B |        1.00 |
 | AreEqualStringComparison | 16.10 ns | 0.030 ns | 0.028 ns |  0.26 |      - |         - |        0.00 |
 ```
+
+## Prefer `StartsWith` over `IndexOf() == 0`
+The problem with IndexOf is, that it will go through the whole string in the worst case. StartsWith on the contrary will directly abort one the first mismatch.
+
+❌ **Bad** Using `IndexOf` which might run through the whole string.
+```csharp
+var startsWithHallo = "Hello World".IndexOf("Hallo") == 0;
+```
+
+✅ **Good** More readable, as well as more performant with `StartsWith`.
+```csharp
+var startsWithHallo = "Hello World".StartsWith("Hallo");
+```
+
+### Benchmark
+```csharp
+[Benchmark(Baseline = true)]
+[Arguments("That is a sentence", "Thzt")]
+public bool IndexOf(string haystack, string needle) => haystack.IndexOf(needle, StringComparison.OrdinalIgnoreCase) == 0;
+
+[Benchmark]
+[Arguments("That is a sentence", "Thzt")]
+public bool StartsWith(string haystack, string needle) =>
+    haystack.StartsWith(needle, StringComparison.OrdinalIgnoreCase);
+```
+
+Results:
+```
+|     Method |           haystack | needle |      Mean |     Error |    StdDev | Ratio |
+|----------- |------------------- |------- |----------:|----------:|----------:|------:|
+|    IndexOf | That is a sentence |   Thzt | 21.966 ns | 0.1584 ns | 0.1482 ns |  1.00 |
+| StartsWith | That is a sentence |   Thzt |  3.066 ns | 0.0142 ns | 0.0126 ns |  0.14 |
+```
