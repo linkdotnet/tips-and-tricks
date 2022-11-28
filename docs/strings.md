@@ -75,7 +75,7 @@ Lots of code is using `"ABC".ToLowerCase() == "abc".ToLowerCase()` to compare tw
 var areStringsEqual = "abc".ToUpperCase() == "ABC".ToUpperCase();
 ```
 
-✅ **Good** Use of the `string.`Equals` overload with the appropriate `StringComparison` technique.
+✅ **Good** Use of the `string.Equals` overload with the appropriate `StringComparison` technique.
 ```csharp
 var areStringsEqual = string.Equals("ABC", "abc", StringComparison.OrdinalIgnoreCase);
 ```
