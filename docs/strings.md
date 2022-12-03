@@ -15,16 +15,7 @@ for (var i = 0; i < 25; i++)
 ```
 
 ✅ **Good** Usage of `StringBuilder` will reduce the allocations dramatically and also performs better.
-```csharp
-var stringBuilder = new StringBuilder();
-
-for (var i = 0; i < 25; i++)
-{
-    stringBuilder.Append("test" + i);
-}
-```
-
-Here a comparison of both methods:
+Here is a comparison of both methods:
 
 ```
 |              Method | Times |        Mean |     Error |      StdDev |      Median | Ratio | RatioSD |   Gen 0 | Allocated |
@@ -139,4 +130,43 @@ Results:
 |----------- |------------------- |------- |----------:|----------:|----------:|------:|
 |    IndexOf | That is a sentence |   Thzt | 21.966 ns | 0.1584 ns | 0.1482 ns |  1.00 |
 | StartsWith | That is a sentence |   Thzt |  3.066 ns | 0.0142 ns | 0.0126 ns |  0.14 |
+```
+
+## Prefer `AsSpan` over `Substring`
+`Substring` always allocates a new string object on the heap. If you have a method that accepts a `Span<char>` or `ReadOnlySpan<char>` you can avoid these allocations. A prime example is `string.Concat` that takes a `ReadOnlySpan<char>` as an input parameter.
+
+❌ **Bad** Creating new `string` objects that are directly discarded afterward.
+```csharp
+var output = Text.Substring(0, 5) + " - " + Text.Substring(11, 4);
+```
+
+✅ **Good** Directly use the underlying memory to avoid heap allocations.
+```csharp
+var output = Text.AsSpan(0, 5), " - ", Text.AsSpan(11, 4);
+```
+
+### Benchmark
+```csharp
+[MemoryDiagnoser]
+public class Benchmark
+{
+    [Params("Hello dear world")]
+    public string Text { get; set; }
+
+    [Benchmark]
+    public string Substring()
+        => Text.Substring(0, 5) + " - " + Text.Substring(11, 4);
+
+    [Benchmark]
+    public string AsSpanConcat()
+        => string.Concat(Text.AsSpan(0, 5), " - ", Text.AsSpan(11, 4));
+}
+```
+
+Results:
+```no-class
+|       Method |             Text |     Mean |    Error |   StdDev |   Gen0 | Allocated |
+|------------- |----------------- |---------:|---------:|---------:|-------:|----------:|
+|    Substring | Hello dear world | 21.18 ns | 0.085 ns | 0.076 ns | 0.0179 |     112 B |
+| AsSpanConcat | Hello dear world | 10.20 ns | 0.021 ns | 0.018 ns | 0.0076 |      48 B |
 ```
