@@ -142,7 +142,7 @@ var output = Text.Substring(0, 5) + " - " + Text.Substring(11, 4);
 
 ✅ **Good** Directly use the underlying memory to avoid heap allocations.
 ```csharp
-var output = Text.AsSpan(0, 5), " - ", Text.AsSpan(11, 4);
+var output = string.Concat(Text.AsSpan(0, 5), " - ", Text.AsSpan(11, 4));
 ```
 
 ### Benchmark
