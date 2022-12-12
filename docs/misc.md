@@ -234,7 +234,7 @@ This works because copying an interger to a temporary variable will result in a 
 Additionally adding the `static` keyword to an anonymous function will prohibit any closures. So `list.Add(() => Console.WriteLine(i));` will result in an compiler error.
 
 ## Safe way of getting a key from a `Dictionary`
-To get an element from a dictionary safely, we should check before hand whether or not that element exists, otherwise we get an exception. Often times people use the `ContainsKey` method followed by the indexer of the dictionary. The problem here is that we do two lookups, even though we only need one (hashtable lookup). Also people find the second option more readable and it shows the intent better.
+To get an element from a dictionary safely, we should check beforehand whether or not that element exists otherwise, we get an exception. Often times people use the `ContainsKey` method followed by the indexer of the dictionary. The problem here is that we do two lookups, even though we only need one (hashtable lookup). Also people find the second option more readable and it shows the intent better.
 
 ❌ **Bad** Use `ContainsKey` in combination with the indexer.
 ```csharp
