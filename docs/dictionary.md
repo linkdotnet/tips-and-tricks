@@ -28,14 +28,14 @@ if (mapping.TryGetValue("some-key"), out var value)
 ## Define the initial size when creating a `Dictionary` when known
 `Dictionary` works internally a bit similiar to a `List`. Once a certain threshold of elements is reached, the internal type holding the information has to be resized. Resizing in this context means, create a new object of that type, which is bigger and copy all entries from the old storage into the new one. This operation is costly. When you build a `Dictionary` and the amount of entries is known, it is a better option to provide that capacity for the `Dictionary`.
 
-❌ **Bad** bad
+❌ **Bad** Don't define the capacity, if known.
 ```csharp
 var dictionary = new Dictionary<string, string>();
 foreach (var key in _keys)
     dictionary[key] = key;
 ```
 
-✅ **Good** good
+✅ **Good** Defining the expected capacity.
 ```csharp
 var dictionary = new Dictionary<string, string>(NumberOfKeys);
 foreach (var key in _keys) 
