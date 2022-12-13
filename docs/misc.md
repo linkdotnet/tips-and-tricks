@@ -232,27 +232,3 @@ list.ForEach(action => action());
 This works because copying an interger to a temporary variable will result in a new reference behind the scenes. You can fiddle around with that example on [sharplab.io](https://sharplab.io/#v2:D4AQDABCCMAsDcBYAUCATNFKBuBDAThADYCWAzgC4QC8EAdgKYDuEAMuRQDwxoB8AFAEokyFADMA9oX55CJGhDDwI8zhACsykgGptglAG8UEE8Q4A6AIIATa/yE1eUaAE5+JQcJQBfLMlKU5gBiUgCiuADGABb8kRQkEnSOEHEJdELCQA===).
 
 Additionally adding the `static` keyword to an anonymous function will prohibit any closures. So `list.Add(() => Console.WriteLine(i));` will result in an compiler error.
-
-## Safe way of getting a key from a `Dictionary`
-To get an element from a dictionary safely, we should check beforehand whether or not that element exists otherwise, we get an exception. Often times people use the `ContainsKey` method followed by the indexer of the dictionary. The problem here is that we do two lookups, even though we only need one (hashtable lookup). Also people find the second option more readable and it shows the intent better.
-
-❌ **Bad** Use `ContainsKey` in combination with the indexer.
-```csharp
-Dictionary<string, string> mapping = GetMapping();
-if (mapping.ContainsKey("some-key"))
-{
-  var value = mapping["some-key"];
-  DoSomethingWithValue(value);
-  // ...
-}
-```
-
-✅ **Good** Avoid two lookups and get the value directly.
-```csharp
-Dictionary<string, string> mapping = GetMapping();
-if (mapping.TryGetValue("some-key"), out var value)
-{
-  DoSomethingWithValue(value);
-  // ...
-}
-```

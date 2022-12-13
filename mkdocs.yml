@@ -56,6 +56,7 @@ nav:
   - Blazor: blazor.md
   - Collections: collections.md
   - Debugging: debugging.md
+  - Dictionary: dictionary.md
   - Exceptions: exceptions.md
   - LINQ: linq.md
   - Misc: misc.md
