@@ -18,7 +18,7 @@ if (mapping.ContainsKey("some-key"))
 ✅ **Good** Avoid two lookups and get the value directly.
 ```csharp
 Dictionary<string, string> mapping = GetMapping();
-if (mapping.TryGetValue("some-key"), out var value)
+if (mapping.TryGetValue("some-key", out var value)
 {
   DoSomethingWithValue(value);
   // ...
