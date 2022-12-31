@@ -91,3 +91,32 @@ Result:
 |   NoSize |          100 | 2,538.13 ns | 10.519 ns | 9.325 ns |  1.00 | 4.8714 |   10192 B |        1.00 |
 | WithSize |          100 | 1,574.53 ns |  8.705 ns | 7.717 ns |  0.62 | 1.4935 |    3128 B |        0.31 |
 ```
+
+## Pass in `StringComparer` to `Dictionary`
+`Dictionary` allows to pass in a `StringComparer` as a constructor argument. This allows for scenarios where you don't care about the case when retrieving a key from the dictionary. It also elimnates all the `ToUpper` or `ToLower` calls. Bonus points as it is slight more performant.
+
+❌ **Bad** Using `ToLower` or `ToUpper` to be case insensitive.
+```csharp
+var myDictionary = new Dictionary<string, int>()
+{
+    { "foo", 1 },
+    { "bar", 2 }
+}
+
+_ = myDictionary.ContainsKey("Foo"); // false
+_ = myDictionary.ContainsKey("Foo".ToLower()); // true
+_ = myDictionary.ContainsKey("foo"); // true
+```
+
+✅ **Good** Pass in a `StringComparer` to the constructor.
+```csharp
+var myDictionary = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
+{
+    { "foo", 1 },
+    { "bar", 2 }
+}
+
+_ = myDictionary.ContainsKey("Foo"); // true
+_ = myDictionary.ContainsKey("FOO"); // true
+_ = myDictionary.ContainsKey("foo"); // true
+```
