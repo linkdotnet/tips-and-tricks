@@ -91,6 +91,7 @@ nav:
     - regex/index.md
     - RegExOptions: regex/regex_options.md
     - Right to left search: regex/right_to_left.md
+    - Source Code Generators: regex/source_generator.md
 extra:
   generator: false
   social:
