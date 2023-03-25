@@ -75,6 +75,7 @@ nav:
     - struct: advanced/struct.md
   - EF Core:
     - efcore/index.md
+    - Detailed Logging: efcore/detailed_logging.md
     - Don't track readonly entities: efcore/asnotracking.md
     - Define maximum length for strings: efcore/maxlength_strings.md
     - LoadAsync: efcore/loadasync.md
