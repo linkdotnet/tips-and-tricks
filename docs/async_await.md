@@ -290,3 +290,71 @@ var blogDbContext = await dbContextFactory.CreateDbContextAsync().ConfigureAwait
 await using var _ = blogDbContext.ConfigureAwait(false);
 // You don't need the {} block here
 ```
+
+## Avoid Async in Constructors
+Constructors are meant to initialize objects synchronously, as their primary purpose is to set up the initial state of the object. When you need to perform asynchronous operations during object initialization, using async methods in constructors can lead to issues such as deadlocks or incorrect object initialization. Instead, use a static asynchronous factory method or a separate asynchronous initialization method to ensure safe and proper object initialization.
+
+Using async operations in constructors can be problematic for several reasons:
+1. Deadlocks: A common mistake when trying to perform async operations in constructors is to use `.GetAwaiter().GetResult()`, `.Result`, or `.Wait()` to synchronously wait for the task to complete. This can lead to deadlocks, especially in environments with a synchronization context like UI applications.
+
+2. Incomplete Initialization: If an async method is not awaited or synchronously blocked within the constructor, the object may be left in an uninitialized or partially initialized state. This can cause unpredictable behavior or errors when using the object.
+
+3. Exception Handling: Handling exceptions thrown from asynchronous operations can be more difficult within constructors. An exception thrown within a constructor will prevent the object from being created, which might not be the desired behavior.
+
+By using a static asynchronous factory method or a separate asynchronous initialization method, you can safely perform asynchronous operations during object initialization and avoid these issues.
+
+❌ **Bad** Calling async methods in constructors
+
+```csharp
+public class MyClass
+{
+    public MyClass()
+    {
+        InitializeAsync().GetAwaiter().GetResult();
+    }
+
+    private async Task InitializeAsync()
+    {
+        await LoadDataAsync();
+    }
+}
+```
+
+✅ **Good**: Option 1 - Static asynchronous factory method:
+
+```csharp
+public class MyClass
+{
+    private MyClass()
+    {
+    }
+
+    public static async Task<MyClass> CreateAsync()
+    {
+        var instance = new MyClass();
+        await instance.InitializeAsync();
+        return instance;
+    }
+
+    private async Task InitializeAsync()
+    {
+        await LoadDataAsync();
+    }
+}
+```
+
+✅ **Good**: Option 2 - Separate asynchronous initialization method:
+
+```csharp
+public class MyClass
+{
+    public MyClass()
+    {
+    }
+
+    public async Task InitializeAsync()
+    {
+        await LoadDataAsync();
+    }
+}
+```
