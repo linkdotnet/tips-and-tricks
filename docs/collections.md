@@ -289,3 +289,31 @@ Result:
 |    InterSectionList | 25.69 us | 0.416 us | 0.369 us |  1.00 |
 | InterSectionHashSet | 11.88 us | 0.108 us | 0.090 us |  0.46 |
 ```
+
+## Use `ArraySegment<T>` for efficient slicing of arrays
+When slicing an array a new array is created. This is especially expensive when the array is large. `ArraySegment<T>` is a struct that holds a reference to the original array and the start and end index of the slice. This is much more efficient than creating a new one. Be aware that the `ArraySegment<T>` is a read-only view of the original array and any changes to the original array will be reflected in the `ArraySegment<T>`.
+
+❌ **Bad** We create a new array when taking a slice of the original array, leading to extra memory allocations. 
+```csharp
+
+public int[] Slice(int[] array, int offset, int count)
+{
+    var result = new int[count];
+    Array.Copy(array, offset, result, 0, count);
+    return result;
+}
+
+var originalArray = new int[] { 1, 2, 3, 4, 5 };
+var slicedArray = Slice(originalArray, 1, 3); // Creates a new array { 2, 3, 4 }
+```
+
+✅ **Good** Use `ArraySegment<T>` to create a view of the original array without creating a new array, avoiding the extra memory allocation.
+```csharp
+public ArraySegment<int> Slice(int[] array, int offset, int count)
+{
+    return new ArraySegment<int>(array, offset, count);
+}
+
+var originalArray = new int[] { 1, 2, 3, 4, 5 };
+var slicedArray = Slice(originalArray, 1, 3); // A view over { 2, 3, 4 } in the original array
+```
