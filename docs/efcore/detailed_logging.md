@@ -25,7 +25,7 @@ services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString)
 #if DEBUG
         .EnableDetailedErrors()
-        .Logto(Console.WriteLine)
+        .LogTo(Console.WriteLine)
 #endif
         ;
 });
