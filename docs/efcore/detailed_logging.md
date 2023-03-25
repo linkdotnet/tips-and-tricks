@@ -2,14 +2,18 @@
 You can enable detailed logging in debug builds by adding the `EnableDetailedErrors` method to the `DbContextOptionsBuilder` in the `ConfigureServices` method of the `Startup` class.
 
 ```csharp
-builder.UseSqlServer(connectionString)
+services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(connectionString)
 #if DEBUG
-    .EnableDetailedErrors()
+        .EnableDetailedErrors()
 #endif
-    ;
+        ;
+});
+
 ```
 
-This can give you vital insights for example if you misconfigured some mappings / configurations.
+This can give you vital insights, for example if you misconfigured some mappings/configurations.
 
 !!! warning
     This is only recommended for development and debugging purposes. It is not recommended to use this in production.
