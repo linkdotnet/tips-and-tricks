@@ -306,7 +306,7 @@ public class MyClass
         InitializeAsync().GetAwaiter().GetResult();
     }
 
-    private async Task InitializeAsync() => await LoadDataAsync()
+    private async Task InitializeAsync() => await LoadDataAsync();
 ```
 
 ✅ **Good**: Option 1 - Static asynchronous factory method:
@@ -323,7 +323,7 @@ public class MyClass
         return instance;
     }
 
-    private async Task InitializeAsync() => await LoadDataAsync()
+    private async Task InitializeAsync() => await LoadDataAsync();
 ```
 
 ✅ **Good**: Option 2 - Separate asynchronous initialization method:
@@ -331,5 +331,5 @@ public class MyClass
 ```csharp
 public class MyClass
 {
-    public async Task InitializeAsync() => await LoadDataAsync()
+    public async Task InitializeAsync() => await LoadDataAsync();
 ```
