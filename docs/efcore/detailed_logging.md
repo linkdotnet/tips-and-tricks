@@ -17,3 +17,15 @@ This can give you vital insights, for example if you misconfigured some mappings
 
 !!! warning
     This is only recommended for development and debugging purposes. It is not recommended to use this in production.
+
+You can combine this with the `LogTo` method to log out the translated queries:
+```csharp
+services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(connectionString)
+#if DEBUG
+        .EnableDetailedErrors()
+        .Logto(Console.WriteLine)
+#endif
+        ;
+});
