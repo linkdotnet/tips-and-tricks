@@ -45,7 +45,7 @@ buffer.Clear(); // or buffer.Fill(0);
 buffer[0] = 1;
 buffer[1] = 1;
 
-int result = buffer[0] + buffer[1] + buffer[2]; // Is not necessarily 2
+int result = buffer[0] + buffer[1] + buffer[2]; // Is 2
 ```
 
 ## `stackalloc` in a loop
